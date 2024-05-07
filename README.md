@@ -6,7 +6,7 @@
     - [Command reference](#command-reference)
 3. [TODO](#todo)
 4. [Contribution](#contribution)
-5. [References](#references)
+5. [Related Projects](#related-projects)
 
 ## Introduction
 
@@ -103,6 +103,7 @@ Get-Command -Module containers-toolkit
     ```
 
 ### Important Notes
+
 1. Requires elevated PowerShell to run some commands.
 
 1. To use these tools (Containerd, BuildKit, and nerdctl), ensure that Containers and HyperV Windows features are enabled.
@@ -124,23 +125,23 @@ Enable-WindowsOptionalFeature -Online -FeatureName '<Feature-Name-Here>' -All -N
 1. Requires PowerShell modules [HNS](https://www.powershellgallery.com/packages/HNS) and [ThreadJob](https://www.powershellgallery.com/packages/ThreadJob)
 
 ## FAQs
+
 1. Error when running Import-Module
     - [Error when running Import-Module](https://vnote42.net/2019/07/30/error-when-running-import-module/)
     - [Unblock a script to run it without changing the execution policy](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.4#example-7-unblock-a-script-to-run-it-without-changing-the-execution-policy)
     - [Unblock-File](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/unblock-file?view=powershell-7.4)
 
-
-
 ## TODO
 
-- [ ] Pipeline configuration
+- [ ] Pipeline configuration:
+  - Code Analysis with [DevSkim](https://aka.ms/DevSkim)
 - [ ] Publish module to PSGallery
 - [ ] Fix Code analysis warnings
 - [ ] Dev install: (Hacks) Add functions in Containerd and BuildKit to build from source files. (Is this really necessary? May be an overkill)
 - [ ] Publish to Microsoft Learn: [MicrosoftDocs
 /
 Virtualization-Documentation](https://github.com/MicrosoftDocs/Virtualization-Documentation/tree/live/virtualization/windowscontainers)
-    - [Contribute to the Microsoft Learn platform](https://learn.microsoft.com/en-us/contribute/content/?source=recommendations)
+  - [Contribute to the Microsoft Learn platform](https://learn.microsoft.com/en-us/contribute/content/?source=recommendations)
 - [x] Rename this module to containerstoolkit: The current name for this module might cause confusion with repository named windows-containers-tools
 - [x] Update README.md (Documentation)
 - [x] Update containers-toolkit/containers-toolkit.Format.ps1xml (Documentation)
@@ -164,7 +165,7 @@ This project builds on work done by others to create a PowerShell module.
 - [setup_buildkitd_on_windows.ps1](https://gist.github.com/gabriel-samfira/6e56238ad11c24f490ac109bdd378471)
 - [Windows Containers on Windows 10 without Docker (using Containerd)](https://www.jamessturtevant.com/posts/Windows-Containers-on-Windows-10-without-Docker-using-Containerd/)
 
-## Container tools repositories
+## Other relevant repositories
 
 - [Containerd](https://github.com/containerd/containerd)
 - [BuildKit](https://github.com/moby/buildkit)
