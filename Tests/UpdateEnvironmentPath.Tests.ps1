@@ -1,7 +1,16 @@
-Describe "UpdateEnvironmentPath.psm1" { 
+###########################################################################
+#                                                                         #
+#   Copyright (c) Microsoft Corporation. All rights reserved.             #
+#                                                                         #
+#   This code is licensed under the MIT License (MIT).                    #
+#                                                                         #
+###########################################################################
+
+
+Describe "UpdateEnvironmentPath.psm1" {
     BeforeAll {
         $RootPath = Split-Path -Parent $PSScriptRoot
-        $ModuleParentPath = Join-Path -Path $RootPath -ChildPath 'ContainerToolsForWindows'
+        $ModuleParentPath = Join-Path -Path $RootPath -ChildPath 'Containers-Toolkit'
         Import-Module -Name "$ModuleParentPath\Private\UpdateEnvironmentPath.psm1" -Force
 
         # Original enviromnent values
@@ -96,14 +105,14 @@ Describe "UpdateEnvironmentPath.psm1" {
             # Act & Assert
             { Update-EnvironmentPath -Tool $tool -Path $path -PathType $pathType -Action $action } | Should -Throw
         }
-    
+
         It "Should throw an error for an invalid PathType" {
             # Arrange
             $tool = "MyTool"
             $path = "TestDrive:\TestTool"
             $pathType = "Invalid"
             $action = "Add"
-    
+
             # Act & Assert
             { Update-EnvironmentPath -Tool $tool -Path $path -PathType $pathType -Action $action } | Should -Throw
         }

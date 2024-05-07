@@ -10,60 +10,66 @@
 
 ## Introduction
 
-ContainerToolsForWindows is a Windows PowerShell module for downloading, installing, and setting up default configs for Containerd, BuildKit, Windows CNI plugin, and nerdctl.
+Containers-Toolkit is a Windows PowerShell module for downloading, installing, and setting up default configs for Containerd, BuildKit, Windows CNI plugin, and nerdctl.
 
 ## Usage
 
 ### Importing the module
 
+> COMING SOON: We are currently working on publishing this module to PS Gallery to make it easier to import the module
+
 #### Option 1
 
-You can manually import this module using:
+Manually import this module using:
 
 ```PowerShell
-Import-Module -Name <absolute-path>\ContainerToolsForWindows.psd1 -Force
+Import-Module -Name <absolute-path>\containers-toolkit.psd1 -Force
 ```
+
+Containers-Toolkit
 
 #### Option 2
 
----
-**Option 2a:**
+Clone containers-toolkit into one of the folder locations in the `$env:PSModulePath` environment variable.
 
-1. Alternatively, you can add it to the Windows PowerShell module path. To get the possible module paths, use:
+To get a possible module path:
 
-    ```PowerShell
-    $env:PSModulePath
-    ```
+```PowerShell
+$env:PSModulePath
+```
 
-2. Move the folder to any of the paths from the above PS command
+```PowerShell
+cd <module path>
+git clone https://github.com/microsoft/containers-toolkit.git
+```
 
-**Option 2b:**
+```PowerShell
+Import-Module -Name containers-toolkit -Force
+```
 
-1. Add the location of the module directory to `$env:PSModulePath`
+#### Option 3
 
-    ```PowerShell
-    $env:PSModulePath += "$env:PSModulePath;<path-to-module-directory>"
-    ```
+Clone containers-toolkit to a folder location of choice and add the new module location to the Windows PowerShell module path
 
-1. Reload the terminal or open a new terminal
+```PowerShell
+cd <module path>
+git clone https://github.com/microsoft/containers-toolkit.git
 
----
 
-1. Import the module
+$env:PSModulePath = "$env:PSModulePath;<path-to-module-directory>"
 
-    ```PowerShell
-    Import-Module -Name ContainerToolsForWindows -Force
-    ```
+Import-Module -Name containers-toolkit -Force
+```
 
-1. Get the module details
+### Get the module details
 
-    ```PowerShell
-    Get-Help ContainerToolsForWindows
-    ```
+```PowerShell
+Get-Help containers-toolkit
+```
 
-    ```PowerShell
-    Get-Module -Name ContainerToolsForWindows
-    ```
+```PowerShell
+Get-Module -Name containers-toolkit
+```
 
 ### Command reference
 
@@ -73,7 +79,7 @@ Import-Module -Name <absolute-path>\ContainerToolsForWindows.psd1 -Force
 #### List of available commands
 
 ```PowerShell
-Get-Command -Module ContainerToolsForWindows
+Get-Command -Module containers-toolkit
 ```
 
 ### Examples
@@ -97,8 +103,9 @@ Get-Command -Module ContainerToolsForWindows
     ```
 
 ### Important Notes
+1. Requires elevated PowerShell to run some commands.
 
-To use these tools (Containerd, BuildKit, and nerdCtl), ensure that Containers and HyperV Windows features are enabled.
+1. To use these tools (Containerd, BuildKit, and nerdctl), ensure that Containers and HyperV Windows features are enabled.
 
 To get the features to enable, use:
 
@@ -114,20 +121,34 @@ To enable a feature:
 Enable-WindowsOptionalFeature -Online -FeatureName '<Feature-Name-Here>' -All -NoRestart
 ```
 
+1. Requires PowerShell modules [HNS](https://www.powershellgallery.com/packages/HNS) and [ThreadJob](https://www.powershellgallery.com/packages/ThreadJob)
+
+## FAQs
+1. Error when running Import-Module
+    - [Error when running Import-Module](https://vnote42.net/2019/07/30/error-when-running-import-module/)
+    - [Unblock a script to run it without changing the execution policy](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.4#example-7-unblock-a-script-to-run-it-without-changing-the-execution-policy)
+    - [Unblock-File](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/unblock-file?view=powershell-7.4)
+
+
+
 ## TODO
 
-- [ ] Rename this module to containerstoolkit: The current name for this module might cause confusion with repository named windows-containers-tools
 - [ ] Pipeline configuration
 - [ ] Publish module to PSGallery
 - [ ] Fix Code analysis warnings
-- [ ] Rootless installation
 - [ ] Dev install: (Hacks) Add functions in Containerd and BuildKit to build from source files. (Is this really necessary? May be an overkill)
+- [ ] Publish to Microsoft Learn: [MicrosoftDocs
+/
+Virtualization-Documentation](https://github.com/MicrosoftDocs/Virtualization-Documentation/tree/live/virtualization/windowscontainers)
+    - [Contribute to the Microsoft Learn platform](https://learn.microsoft.com/en-us/contribute/content/?source=recommendations)
+- [x] Rename this module to containerstoolkit: The current name for this module might cause confusion with repository named windows-containers-tools
 - [x] Update README.md (Documentation)
-- [x] Update ContainerToolsForWindows/ContainerToolsForWindows.Format.ps1xml (Documentation)
-- [x] Update ContainerToolsForWindows/en-US/about_ContainerToolsForWindows.help.txt (Documentation)
-- [x] Use latest version in download
+- [x] Update containers-toolkit/containers-toolkit.Format.ps1xml (Documentation)
+- [x] Update Containers-Toolkit/Containers-ToolkitlsForWindows.help.txt (Documentation)
+- [x] Use Containers-Toolkit
 - [x] Add Pester test
 - [x] Replace GitHub username in URL: <https://github.com/...>
+- [ ] ~~Rootless installation~~: Not needed for Windows
 
 ## Contribution
 
@@ -140,12 +161,12 @@ This project builds on work done by others to create a PowerShell module.
 - [containerd-installer](https://github.com/lippertmarkus/containerd-installer)
 - [Install MCR on Windows Servers](https://docs.mirantis.com/mcr/20.10/install/mcr-windows.html)
 - [Stevedore](https://github.com/slonopotamus/stevedore)
-- [setup_buildkitd_on_windows.ps1] <https://gist.github.com/gabriel-samfira/6e56238ad11c24f490ac109bdd378471>
+- [setup_buildkitd_on_windows.ps1](https://gist.github.com/gabriel-samfira/6e56238ad11c24f490ac109bdd378471)
 - [Windows Containers on Windows 10 without Docker (using Containerd)](https://www.jamessturtevant.com/posts/Windows-Containers-on-Windows-10-without-Docker-using-Containerd/)
 
 ## Container tools repositories
 
 - [Containerd](https://github.com/containerd/containerd)
 - [BuildKit](https://github.com/moby/buildkit)
-- [Nerdctl](https://github.com/containerd/nerdctl)
+- [nerdctl](https://github.com/containerd/nerdctl)
 - [Container networking plugins for Windows containers](https://github.com/microsoft/windows-container-networking)
