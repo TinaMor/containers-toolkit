@@ -28,12 +28,12 @@ _Any links from your research that will help explain the changes_
 
 As part of our commitment to engineering excellence, **before** submitting this PR, please make sure:
 
-- [ ] You've tested this code in both Desktop & Server enviroments (**functional testing**).
+- [ ] You've tested this code in both Desktop & Server enviroments and AMD & ARM64 enviroments (**functional testing**).
 - [ ] You've added **unit tests** for new code.
 - [ ] You've added/ updated documentation in the [cmdlet docs](../docs/About/) and the [modules help files](../ContainerToolsForWindows/en-US/ContainerToolsForWindows-help.xml).
 - [ ] You've reviewed the PR/code best practices defined [here](https://learn.microsoft.com/en-us/powershell/scripting/community/contributing/pull-requests?view=powershell-7.4).
 
 In addition, **after** this PR has been reviewed, please agree to:
 
-- [ ] If changes have been made to your PR in the process of addressing comments, please make sure to test the _final_ version in both Desktop and Service mode again.
-- [ ] Validate your changes have notintroduced any regressions.
+- [ ] If changes have been made to your PR in the process of addressing comments, please make sure to test again the _final_ version in both Desktop & Service mode and AMD & ARM64 enviroments.
+- [ ] Validate your changes have not introduced any regressions.
