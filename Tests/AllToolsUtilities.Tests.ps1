@@ -67,6 +67,7 @@ Describe "AllToolsUtilities.psm1" {
             Mock Register-ContainerdService -ModuleName 'AllToolsUtilities'
             Mock Register-BuildkitdService -ModuleName 'AllToolsUtilities'
             Mock Initialize-NatNetwork -ModuleName 'AllToolsUtilities'
+            Mock Test-EmptyDirectory -ModuleName 'AllToolsUtilities' -MockWith { return $false }
         }
 
         It 'Should not process on implicit request for validation (WhatIfPreference)' {
@@ -141,6 +142,8 @@ Describe "AllToolsUtilities.psm1" {
         }
 
         It "Should use user-specified values" {
+            Mock Test-EmptyDirectory -ModuleName 'AllToolsUtilities' -MockWith { return $true }
+
             Install-ContainerTools `
                 -ContainerDVersion '7.8.9' `
                 -BuildKitVersion '4.5.6' `
