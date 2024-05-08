@@ -25,6 +25,7 @@ on:
 
 jobs:
   build-job:
+    # TODO: Fix runs-on not working  
     runs-on: windows-latest
     # runs-on: ["${{ inputs.image }}"]
     # defaults:
@@ -42,6 +43,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # TODO: Fix cache not working
       - name: Setup PowerShell module cache
         id: cacher
         uses: actions/cache@v3
