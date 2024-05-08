@@ -1,4 +1,4 @@
-name: DevSkim
+name: SDL Compliance
 
 on:
   push:
@@ -7,9 +7,9 @@ on:
     branches: ["main", "releases/**"]
 
 jobs:
-  lint:
+  devskim:
     name: DevSkim
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       actions: read
       contents: read
