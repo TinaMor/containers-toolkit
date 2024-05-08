@@ -1,0 +1,105 @@
+name: CI Build
+
+on:
+  pull_request:
+    branches:
+      - main
+      - "releases/**"
+
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - en-US/**"
+
+  workflow_dispatch:
+    inputs:
+      image:
+        description: "Windows runner image"
+        required: true
+        default: "windows-latest"
+        type: choice
+        options:
+          - windows-latest
+          - windows-2022
+          - windows-2019
+
+jobs:
+  build-job:
+    runs-on: ["${{ inputs.image }}"]
+    # defaults:
+    #   run:
+    #     working-directory: ./
+
+    env:
+      MODULE_DIR: .\Containers-Toolkit
+      BUILD_SCRIPTS_DIR: .\build\scripts
+      PESTER_RESULTS_DIR: .\TestResults
+      MODULE_ARTIFACT: CTK.Module.Scripts
+      REPO_ARTIFACT: CTK.Scripts
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PowerShell module cache
+        id: cacher
+        uses: actions/cache@v3
+        with:
+          path: "C:\\program files\\powershell\\7\\Modules"
+          key: ${{ runner.os }}-CTK
+
+      - name: Install required PowerShell modules
+        if: steps.cacher.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module HNS, PSScriptAnalyzer, ThreadJob -ErrorAction Stop
+
+      - name: Run code analysis with PSScriptAnalyzer
+        shell: pwsh
+        run: ${{ env.BUILD_SCRIPTS_DIR}\script-analyzer.ps1 > psscriptanalysis.sarif
+
+      # Upload the SARIF file generated in the PSScriptAnalyzer step
+      - name: Publish SARIF results file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: psscriptanalysis.sarif
+
+      - name: Run Pester tests
+        shell: pwsh
+        run: ${{ env.BUILD_SCRIPTS_DIR}}\run-tests.ps1
+
+      - name: Publish test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: CTK-Pester-Tests
+          path: ${{ env.PESTER_RESULTS_DIR }}\Test-Results.xml
+          if-no-files-found: error
+          overwrite: true
+
+      - name: Publish code coverage results
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: ${{ env.PESTER_RESULTS_DIR }}\coverage.xml
+          fail_below_min: true
+          format: markdown
+          output: both
+
+      - name: Publish module scripts to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.MODULE_ARTIFACT }}
+          path: $MODULE_DIR
+          if-no-files-found: error
+          overwrite: true
+
+      - name: Publish entire dir to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.REPO_ARTIFACT }}
+          path: .
+          if-no-files-found: error
+          overwrite: true
+
+    # The always() function configures the job to continue processing even if there are test failures
+    if: ${{ always() }}

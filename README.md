@@ -132,7 +132,8 @@ Enable-WindowsOptionalFeature -Online -FeatureName '<Feature-Name-Here>' -All -N
     - [Unblock-File](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/unblock-file?view=powershell-7.4)
 
 ## TODO
-
+- [ ] Set up GitWorkflow files: 
+    - [GitHub Repository Structure Best Practices](https://medium.com/code-factory-berlin/github-repository-structure-best-practices-248e6effc405)
 - [ ] Pipeline configuration:
   - Code Analysis with [DevSkim](https://aka.ms/DevSkim)
 - [ ] Publish module to PSGallery

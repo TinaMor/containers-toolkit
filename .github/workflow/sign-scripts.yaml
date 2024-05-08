@@ -1,0 +1,42 @@
+# https://tech.nicolonsky.ch/github-actions-powershell-signing/
+
+name: Sign PowerShell Scripts
+on:
+  push:
+    branches:
+      - "main"
+      - "releases/**"
+
+env:
+  MODULE_ARTIFACT: CTK.Module.Scripts
+  REPO_ARTIFACT: CTK.Scripts
+  SIGNED_MODULE_ARTIFACT: CTK.Module.Scripts.Signed
+  SIGNED_REPO_ARTIFACT: CTK.Scripts.Signed
+  SRC_DIRECTORY: .\Containers-Toolkit\
+
+jobs:
+  sign_scripts:
+    name: Sign and archives Containers-Toolkit PowerShell scripts
+    runs-on: windows-latest
+    steps:
+    - name: Download unsigned module scripts from artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ env.MODULE_ARTIFACT }}
+
+    - name:  Sign and archive signed module scripts
+      uses: ./.github/actions/sign-scripts
+      with: 
+        input_artifact_name: ${{ env.MODULE_ARTIFACT }}
+        output_artifact_name: ${{ env.SIGNED_MODULE_ARTIFACT }}
+
+    - name: Download unsigned repository scripts from artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ env.REPO_ARTIFACT }}
+
+    - name: Sign and archive signed repository scripts
+      uses: ./.github/actions/sign-scripts
+      with: 
+        input_artifact_name: ${{ env.REPO_ARTIFACT }}
+        output_artifact_name: ${{ env.SIGNED_REPO_ARTIFACT }}
