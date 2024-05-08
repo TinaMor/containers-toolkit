@@ -25,7 +25,7 @@ on:
 
 jobs:
   build-job:
-    runs-on: ["${{ inputs.image }}"]
+    runs-on: ${{ inputs.image }}
     # defaults:
     #   run:
     #     working-directory: ./
