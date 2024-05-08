@@ -22,7 +22,7 @@ jobs:
         uses: microsoft/DevSkim-Action@v1
         with:
           # Relative path in $GITHUB_WORKSPACE for DevSkim to Scan
-          directory-to-scan: .\containers-toolkit
+          directory-to-scan: containers-toolkit/
           ignore-globs: "en-US/**"
 
       - name: Upload DevSkim scan results to GitHub Security tab
