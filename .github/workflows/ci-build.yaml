@@ -26,6 +26,7 @@ on:
 jobs:
   build-job:
     runs-on: windows-latest
+    # runs-on: ["${{ inputs.image }}"]
     # defaults:
     #   run:
     #     working-directory: ./
@@ -53,7 +54,17 @@ jobs:
         shell: pwsh
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
-          Install-Module HNS, PSScriptAnalyzer, ThreadJob -ErrorAction Stop
+          # Check if the module is already installed iteratively
+          $modules = @('Pester', 'PSScriptAnalyzer', 'ThreadJob', 'HNS')
+          $toInstasll = @()
+          foreach ($module in $modules) {
+            if (-not (Get-Module -ListAvailable -Name $module)) {
+              $toInstasll += $module
+            }
+          }
+          if ($toInstasll.Count -gt 0) {
+            Install-Module $toInstasll -ErrorAction Stop
+          }
 
       - name: Run code analysis with PSScriptAnalyzer
         shell: pwsh
