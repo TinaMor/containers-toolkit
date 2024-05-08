@@ -54,8 +54,8 @@ jobs:
         shell: pwsh
         run: |
           Set-PSRepository PSGallery -InstallationPolicy Trusted
-          $requuiredModules = @('Pester', 'PSScriptAnalyzer', 'ThreadJob', 'HNS')
-          $missingModules = $requuiredModules | Where-Object { -not (Get-Module -ListAvailable -Name $_) }
+          $requiredModules = @('Pester', 'PSScriptAnalyzer', 'ThreadJob', 'HNS')
+          $missingModules = $requiredModules | Where-Object { -not (Get-Module -ListAvailable -Name $_) }
 
           if ($missingModules) {
             Write-Host "Modules to install: $($missingModules -join ', ')"
@@ -64,13 +64,16 @@ jobs:
 
       - name: Run code analysis with PSScriptAnalyzer
         shell: pwsh
-        run: ${{ env.BUILD_SCRIPTS_DIR}}\script-analyzer.ps1 > psscriptanalysis.sarif
+        run: ${{ env.BUILD_SCRIPTS_DIR}}\script-analyzer.ps1
 
       # Upload the SARIF file generated in the PSScriptAnalyzer step
-      - name: Publish SARIF results file
-        uses: github/codeql-action/upload-sarif@v2
+      - name: Publish PSScriptAnalyzer results file
+        uses: actions/upload-artifact@v4
         with:
-          sarif_file: psscriptanalysis.sarif
+          name: PSScriptAnalyzer.Results
+          path: psscriptanalysis.xml
+          if-no-files-found: error
+          overwrite: true
 
       - name: Run Pester tests
         shell: pwsh
@@ -79,7 +82,7 @@ jobs:
       - name: Publish test results
         uses: actions/upload-artifact@v4
         with:
-          name: CTK-Pester-Tests
+          name: CTK.Pester.Results
           path: ${{ env.PESTER_RESULTS_DIR }}\Test-Results.xml
           if-no-files-found: error
           overwrite: true
@@ -96,7 +99,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.MODULE_ARTIFACT }}
-          path: $MODULE_DIR
+          path: ${{ env.MODULE_DIR }}
           if-no-files-found: error
           overwrite: true
 

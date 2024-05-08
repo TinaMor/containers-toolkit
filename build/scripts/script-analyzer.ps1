@@ -16,13 +16,13 @@ Import-Module -Name PSScriptAnalyzer -Force
 $codeAnalysis = Invoke-ScriptAnalyzer -Path .\Containers-Toolkit\ -Recurse -ExcludeRule PSProvideCommentHelp
 
 $lintIssues = $codeAnalysis | Where-Object { $_.Severity -notlike 'Error' }
-if ($lintIssues) {
-    Write-Warning "$($lintIssues.Count) lint issues found"
-    $lintIssues
+$lintErrors = $codeAnalysis | Where-Object { $_.Severity -like '*Error' }
+Write-Warning "$($lintIssues.Count) errors and $($lintIssues.Count) warnings found"
+
+if ($lintErrors -or $lintIssues) {
+    Export-Clixml -Path 'psscriptanalysis.xml' -InputObject $codeAnalysis
 }
 
-$lintErrors = $codeAnalysis | Where-Object { $_.Severity -like '*Error' }
 if ($lintErrors) {
-    $lintErrors
     Throw "$($lintErrors.Count) lint errors found"
 }
