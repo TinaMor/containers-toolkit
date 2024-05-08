@@ -134,6 +134,7 @@ Enable-WindowsOptionalFeature -Online -FeatureName '<Feature-Name-Here>' -All -N
 ## TODO
 - [ ] Set up GitWorkflow files: 
     - [GitHub Repository Structure Best Practices](https://medium.com/code-factory-berlin/github-repository-structure-best-practices-248e6effc405)
+    - Setup ARM64 [self-hosted runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners)
 - [ ] Pipeline configuration:
   - Code Analysis with [DevSkim](https://aka.ms/DevSkim)
 - [ ] Publish module to PSGallery
