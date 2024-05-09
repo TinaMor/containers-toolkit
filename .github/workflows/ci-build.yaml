@@ -1,19 +1,18 @@
 name: CI Build
 
 on:
-  push:
-    branches: ["main", "releases/**"]
   pull_request:
     branches: ["main", "releases/**"]
     paths-ignore:
       - "docs/**"
       - "*.md"
       - en-US/**"
-  workflow_call:
+
+  workflow_dispatch:
     inputs:
       runner:
         description: "Windows runner image"
-        required: true
+        required: false
         default: windows-2022
         type: string
         # type: choice
@@ -28,7 +27,6 @@ env:
   PESTER_RESULTS_DIR: .\TestResults
   MODULE_ARTIFACT: CTK.Module.Scripts
   REPO_ARTIFACT: CTK.Scripts
-
 
 jobs:
   lint:
