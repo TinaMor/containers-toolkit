@@ -44,7 +44,8 @@ jobs:
 
       - name: Run code analysis with PSScriptAnalyzer
         shell: pwsh
-        run: ${{ env.BUILD_SCRIPTS_DIR}}\script-analyzer.ps1
+        run: |
+          ${{ env.BUILD_SCRIPTS_DIR}}\script-analyzer.ps1
 
       - name: Publish PSScriptAnalyzer results file
         uses: actions/upload-artifact@v4
@@ -138,7 +139,6 @@ jobs:
   publish-coverage-results:
     needs: pester
     runs-on: ubuntu-latest
-
     steps:
       - name: Download coverage results artifact
         uses: actions/download-artifact@v4
