@@ -29,7 +29,7 @@ env:
 
 jobs:
   lint:
-    runs-on: ${{ github.event.inputs.RUNNER | windows-2022 }}
+    runs-on: ${{ github.event.inputs.RUNNER || windows-2022 }}
     defaults:
       run:
         working-directory: ./
