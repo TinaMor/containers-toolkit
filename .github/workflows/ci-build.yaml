@@ -15,9 +15,9 @@ on:
     inputs:
       win-image:
         description: "Windows runner image"
-        required: false
-        default: windows-2022
         type: string
+        required: false
+        default: 'windows-2022'
         # type: choice
         # options:
         #   - windows-latest
