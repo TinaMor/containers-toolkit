@@ -1,7 +1,8 @@
 # CONTAINERS TOOLKIT POWERSHELL MODULE
 
-[![CI Build](https://github.com/microsoft/containers-toolkit/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/microsoft/containers-toolkit/actions/workflows/ci-build.yaml)
-[![DevSkim](https://github.com/microsoft/containers-toolkit/actions/workflows/sdl-compliance.yaml/badge.svg)](https://github.com/microsoft/containers-toolkit/actions/workflows/sdl-compliance.yaml)
+<!-- TODO: Change username -->
+[![CI Build](https://github.com/tinamor/containers-toolkit/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/tinamor/containers-toolkit/actions/workflows/ci-build.yaml)
+[![DevSkim](https://github.com/tinamor/containers-toolkit/actions/workflows/sdl-compliance.yaml/badge.svg)](https://github.com/tinamor/containers-toolkit/actions/workflows/sdl-compliance.yaml)
 [![cf-image][]][cf-site]
 [![Coverage]()]
 
