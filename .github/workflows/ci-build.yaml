@@ -11,17 +11,52 @@ on:
       - "*.md"
       - en-US/**"
 
+env:
+  MODULE_DIR: .\Containers-Toolkit
+  BUILD_SCRIPTS_DIR: .\build\scripts
+  PESTER_RESULTS_DIR: .\TestResults
+  MODULE_ARTIFACT: CTK.Module.Scripts
+  REPO_ARTIFACT: CTK.Scripts
+
+
 jobs:
-  build-job:
+  lint:
+    runs-on: windows-2022
+    steps:
+      # TODO: Fix cache not working
+      - name: Setup PowerShell module cache
+        id: cacher
+        uses: actions/cache@v3
+        with:
+          path: "C:\\program files\\powershell\\7\\Modules"
+          key: ${{ runner.os }}-CTK
+
+      - name: Install required PowerShell modules
+        if: steps.cacher.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          $ModuleName = 'PSScriptAnalyzer'
+          if (-not (Get-Module -ListAvailable -Name $ModuleName)) {
+            Write-Host "Modules to install: '$ModuleName'"
+            Install-Module $ModuleName -ErrorAction Stop -AllowClobber -SkipPublisherCheck -Force
+          }
+
+      - name: Run code analysis with PSScriptAnalyzer
+        shell: pwsh
+        run: ${{ env.BUILD_SCRIPTS_DIR}}\script-analyzer.ps1
+
+      - name: Publish PSScriptAnalyzer results file
+        uses: actions/upload-artifact@v4
+        with:
+          name: PSScriptAnalyzer.Results
+          path: psscriptanalysis.xml
+          if-no-files-found: error
+          overwrite: true
+
+  pester:
     # TODO: Add Windows ARM64 support
     runs-on: windows-2022
-
-    env:
-      MODULE_DIR: .\Containers-Toolkit
-      BUILD_SCRIPTS_DIR: .\build\scripts
-      PESTER_RESULTS_DIR: .\TestResults
-      MODULE_ARTIFACT: CTK.Module.Scripts
-      REPO_ARTIFACT: CTK.Scripts
 
     steps:
       - name: Checkout code
@@ -39,26 +74,16 @@ jobs:
         if: steps.cacher.outputs.cache-hit != 'true'
         shell: pwsh
         run: |
+          Get-Command "Get-HNSNetwork"
+
           Set-PSRepository PSGallery -InstallationPolicy Trusted
-          $requiredModules = @('Pester', 'PSScriptAnalyzer', 'ThreadJob', 'HNS')
+          $requiredModules = @('Pester', 'ThreadJob', 'HNS')
           $missingModules = $requiredModules | Where-Object { -not (Get-Module -ListAvailable -Name $_) }
 
           if ($missingModules) {
             Write-Host "Modules to install: $($missingModules -join ', ')"
             Install-Module $missingModules -ErrorAction Stop -AllowClobber -SkipPublisherCheck -Force
           }
-
-      - name: Run code analysis with PSScriptAnalyzer
-        shell: pwsh
-        run: ${{ env.BUILD_SCRIPTS_DIR}}\script-analyzer.ps1
-
-      - name: Publish PSScriptAnalyzer results file
-        uses: actions/upload-artifact@v4
-        with:
-          name: PSScriptAnalyzer.Results
-          path: psscriptanalysis.xml
-          if-no-files-found: error
-          overwrite: true
 
       - name: Run Pester tests
         shell: pwsh
