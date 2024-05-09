@@ -16,8 +16,8 @@ on:
       win-image:
         description: "Windows runner image"
         type: string
-        required: false
-        default: 'windows-2022'
+        required: true
+        # default: 'windows-2022'
         # type: choice
         # options:
         #   - windows-latest
