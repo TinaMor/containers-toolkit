@@ -5,13 +5,13 @@ on:
     branches: ["main", "releases/**"]
   pull_request:
     branches: ["main", "releases/**"]
-
     paths-ignore:
       - "docs/**"
       - "*.md"
       - en-US/**"
 
 env:
+  RUNNER: windows-2022
   MODULE_DIR: .\Containers-Toolkit
   BUILD_SCRIPTS_DIR: .\build\scripts
   PESTER_RESULTS_DIR: .\TestResults
@@ -21,7 +21,7 @@ env:
 
 jobs:
   lint:
-    runs-on: windows-2022
+    runs-on: ${{ env.RUNNER }}
     steps:
       # TODO: Fix cache not working
       - name: Setup PowerShell module cache
@@ -57,8 +57,7 @@ jobs:
 
   pester:
     # TODO: Add Windows ARM64 support
-    runs-on: windows-2022
-
+    runs-on: ${{ env.RUNNER }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
