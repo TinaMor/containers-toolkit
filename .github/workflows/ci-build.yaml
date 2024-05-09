@@ -26,17 +26,12 @@ on:
 
 jobs:
   build-job:
-    # FIXME: Fix runs-on not working
     # TODO: Add Windows ARM64 support
-    # runs-on: windows-latest
-    runs-on: ${{ inputs.win-image }}
-    # defaults:
-    #   run:
-    #     working-directory: ./
+    runs-on: windows-latest
 
     # strategy:
     #   matrix:
-    #     platform: ["${{ inputs.win-image }}"]
+    #     platform: [self-host, windows-latest]
     # runs-on: ${{ matrix.platform }}
 
     env:
