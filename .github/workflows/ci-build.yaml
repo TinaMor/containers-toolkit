@@ -28,14 +28,15 @@ jobs:
     # FIXME: Fix runs-on not working
     # TODO: Add Windows ARM64 support
     # runs-on: windows-latest
-    runs-on: "${{ inputs.image }}"
+    # runs-on: "${{ inputs.image }}"
     # defaults:
     #   run:
     #     working-directory: ./
 
-    # strategy:
-    #   matrix:
-    #     platform: [ubuntu-latest, macos-latest, windows-latest]
+    strategy:
+      matrix:
+        platform: ["${{ inputs.image }}"]
+    runs-on: ${{ matrix.platform }}
 
     env:
       MODULE_DIR: .\Containers-Toolkit
