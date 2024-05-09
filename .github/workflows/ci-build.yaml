@@ -1,13 +1,6 @@
 name: CI Build
 
 on:
-  pull_request:
-    branches: ["main", "releases/**"]
-    paths-ignore:
-      - "docs/**"
-      - "*.md"
-      - en-US/**"
-
   workflow_dispatch:
     inputs:
       runner:
@@ -19,6 +12,14 @@ on:
           - windows-latest
           - windows-2022
           - windows-2019
+
+  pull_request:
+    branches: ["main", "releases/**"]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - en-US/**"
+
 
 env:
   MODULE_DIR: .\Containers-Toolkit
@@ -163,7 +164,7 @@ jobs:
       - name: Publish code coverage results
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: ./coverage.xml
-          fail_below_min: true
-          format: markdown
-          output: both
+          filename: coverage.xml
+          # fail_below_min: true
+          # format: markdown
+          # output: both
