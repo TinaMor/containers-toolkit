@@ -16,7 +16,7 @@ on:
       image:
         description: "Windows runner image"
         required: true
-        default: windows-latest
+        default: windows-2022
         type: choice
         options:
           - windows-latest
@@ -25,12 +25,17 @@ on:
 
 jobs:
   build-job:
-    # TODO: Fix runs-on not working  
-    runs-on: windows-latest
-    # runs-on: ["${{ inputs.image }}"]
+    # FIXME: Fix runs-on not working
+    # TODO: Add Windows ARM64 support
+    # runs-on: windows-latest
+    runs-on: "${{ inputs.image }}"
     # defaults:
     #   run:
     #     working-directory: ./
+
+    # strategy:
+    #   matrix:
+    #     platform: [ubuntu-latest, macos-latest, windows-latest]
 
     env:
       MODULE_DIR: .\Containers-Toolkit
@@ -82,7 +87,7 @@ jobs:
           $ErrorActionPreference = 'Continue'
           ${{ env.BUILD_SCRIPTS_DIR}}\run-tests.ps1
 
-      - name: Publish test results
+      - name: Publish Pester results
         uses: actions/upload-artifact@v4
         with:
           name: CTK.Pester.Results

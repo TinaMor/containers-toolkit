@@ -23,8 +23,6 @@ runs:
       env:
         BASE64_PFX: ${{ secrets.BASE64_PFX }}
         PFX_PASSWORD: ${{ secrets.PFX_PASSWORD }}
-    # - name: Check out repository
-    #   uses: actions/checkout@v2
 
     - name: Download Container Toolkit scripts
       uses: actions/download-artifact@v4
@@ -51,6 +49,7 @@ runs:
                 Write-Error $_
             }
         }
+
     - name: Publish signed scripts to GitHub Artifacts
       uses: actions/upload-artifact@v2
       with:
