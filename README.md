@@ -4,7 +4,7 @@
 [![CI Build](https://github.com/tinamor/containers-toolkit/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/tinamor/containers-toolkit/actions/workflows/ci-build.yaml)
 [![DevSkim](https://github.com/tinamor/containers-toolkit/actions/workflows/sdl-compliance.yaml/badge.svg)](https://github.com/tinamor/containers-toolkit/actions/workflows/sdl-compliance.yaml)
 [![cf-image][]][cf-site]
-[![Coverage]()]
+[![CI Build](https://github.com/tinamor/containers-toolkit/actions/workflows/ci-build.yaml/badge_linecoverage.svg)](https://github.com/tinamor/containers-toolkit/actions/workflows/ci-build.yaml)
 
 [cf-site]: https://www.codefactor.io/repository/github/powershell/powershell
 [cf-image]: https://www.codefactor.io/repository/github/powershell/powershell/badge
