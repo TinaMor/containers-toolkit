@@ -155,10 +155,10 @@ jobs:
         with:
           name: CTK.Coverage.Summary
 
-      - name: Print the files in the directory
+      - name: View the coverage results
         shell: bash
         run: |
-          ls -R
+          cat coverage.xml
 
       - name: Publish code coverage results
         uses: irongut/CodeCoverageSummary@v1.3.0

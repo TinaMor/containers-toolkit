@@ -1,0 +1,4 @@
+# Checkout from the repository
+# Sign the module scripts
+# Sign the repository scripts
+  # - remove the unnecessary dirs eg .git/, .github
