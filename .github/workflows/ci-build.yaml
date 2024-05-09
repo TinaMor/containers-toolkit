@@ -156,6 +156,10 @@ jobs:
           name: CTK.Coverage.Summary
           path: ${{ env.PESTER_RESULTS_DIR }}\coverage.xml
 
+      - name: Print the files in the directory
+        shell: bash
+        run: ls ./
+
       - name: Publish code coverage results
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
