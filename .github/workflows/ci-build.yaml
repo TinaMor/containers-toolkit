@@ -11,28 +11,10 @@ on:
       - "*.md"
       - en-US/**"
 
-  workflow_dispatch:
-    inputs:
-      win-image:
-        description: "Windows runner image"
-        type: string
-        required: true
-        # default: 'windows-2022'
-        # type: choice
-        # options:
-        #   - windows-latest
-        #   - windows-2022
-        #   - windows-2019
-
 jobs:
   build-job:
     # TODO: Add Windows ARM64 support
-    runs-on: windows-latest
-
-    # strategy:
-    #   matrix:
-    #     platform: [self-host, windows-latest]
-    # runs-on: ${{ matrix.platform }}
+    runs-on: windows-2022
 
     env:
       MODULE_DIR: .\Containers-Toolkit
@@ -117,5 +99,18 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-    # The always() function configures the job to continue processing even if there are test failures
-    if: ${{ always() }}
+    # # The always() function configures the job to continue processing even if there are test failures
+    # if: ${{ always() }}
+
+  publish-coverage-results:
+    needs: build-job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Publish code coverage results
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: ${{ env.PESTER_RESULTS_DIR }}\coverage.xml
+          fail_below_min: true
+          format: markdown
+          output: both
