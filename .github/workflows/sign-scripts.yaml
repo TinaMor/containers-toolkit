@@ -4,7 +4,6 @@ name: Sign PowerShell Scripts
 on:
   push:
     branches:
-      - "main"
       - "releases/**"
 
 env:

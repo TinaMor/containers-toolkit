@@ -127,21 +127,21 @@ jobs:
       #     format: markdown
       #     output: both
 
-      - name: Publish module scripts to GitHub Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.MODULE_ARTIFACT }}
-          path: ${{ env.MODULE_DIR }}
-          if-no-files-found: error
-          overwrite: true
+      # - name: Publish module scripts to GitHub Artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.MODULE_ARTIFACT }}
+      #     path: ${{ env.MODULE_DIR }}
+      #     if-no-files-found: error
+      #     overwrite: true
 
-      - name: Publish entire dir to GitHub Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.REPO_ARTIFACT }}
-          path: .
-          if-no-files-found: error
-          overwrite: true
+      # - name: Publish entire dir to GitHub Artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.REPO_ARTIFACT }}
+      #     path: .
+      #     if-no-files-found: error
+      #     overwrite: true
 
     # # The always() function configures the job to continue processing even if there are test failures
     # if: ${{ always() }}
@@ -154,11 +154,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: CTK.Coverage.Summary
-          path: ${{ env.PESTER_RESULTS_DIR }}\coverage.xml
+          path: ${{ env.PESTER_RESULTS_DIR }}
 
       - name: Print the files in the directory
         shell: bash
-        run: ls ./
+        run: |
+          ls -R
 
       - name: Publish code coverage results
         uses: irongut/CodeCoverageSummary@v1.3.0
