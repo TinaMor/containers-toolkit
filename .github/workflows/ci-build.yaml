@@ -30,7 +30,10 @@ env:
 
 jobs:
   lint:
-    runs-on: ${{ inputs.RUNNER }}
+    runs-on: ${{ github.event.inputs.RUNNER }}
+    defaults:
+      run:
+        working-directory: ./
     steps:
       # TODO: Fix cache not working
       - name: Setup PowerShell module cache
