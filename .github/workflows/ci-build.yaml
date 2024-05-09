@@ -28,7 +28,7 @@ jobs:
     # FIXME: Fix runs-on not working
     # TODO: Add Windows ARM64 support
     # runs-on: windows-latest
-    runs-on: "${{ inputs.win-image }}"
+    runs-on: ${{ inputs.win-image }}
     # defaults:
     #   run:
     #     working-directory: ./
