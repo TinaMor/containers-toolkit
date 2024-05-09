@@ -158,7 +158,7 @@ jobs:
       - name: View the coverage results
         shell: bash
         run: |
-          cat coverage.xml
+          cat ./coverage.xml
 
       - name: Publish code coverage results
         uses: irongut/CodeCoverageSummary@v1.3.0
