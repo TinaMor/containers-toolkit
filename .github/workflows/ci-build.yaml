@@ -136,7 +136,7 @@ jobs:
     # if: ${{ always() }}
 
   publish-coverage-results:
-    needs: build-job
+    needs: pester
     runs-on: ubuntu-latest
 
     steps:
