@@ -147,7 +147,7 @@ jobs:
     # # The always() function configures the job to continue processing even if there are test failures
     # if: ${{ always() }}
 
-  publish-coverage-results:
+  test-coverage:
     needs: pester
     runs-on: ubuntu-latest
     steps:
@@ -169,6 +169,7 @@ jobs:
       # https://github.com/PowerShell/PowerShell/blob/master/docs/testing-guidelines/getting-code-coverage.md
       # https://github.com/danielpalme/ReportGenerator
       # https://github.com/marketplace/actions/reportgenerator
+      # https://reportgenerator.io/usage
 
       - name: Setup .NET Core # Required to execute ReportGenerator
         uses: actions/setup-dotnet@v3
@@ -181,7 +182,7 @@ jobs:
         with:
           reports: coverage.xml
           targetdir: coveragereport
-          reporttypes: Html;Badges
+          reporttypes: HtmlInline;MarkdownSummaryGithub;Badges
           historydir: coveragehistory
 
       - name: Upload coverage report artifact
@@ -189,3 +190,13 @@ jobs:
         with:
           name: coveragereport # Artifact name        
           path: coveragereport # Directory containing files to upload
+
+      - name: Publish coverage summary
+        uses: marocchino/sticky-pull-request-comment@v2
+        continue-on-error: true
+        with:
+          path: coveragereport/SummaryGithub.md
+
+      - name: Post results
+        run: |
+          cat coveragereport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
