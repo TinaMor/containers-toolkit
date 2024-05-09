@@ -14,12 +14,11 @@ on:
         description: "Windows runner image"
         required: false
         default: windows-2022
-        type: string
-        # type: choice
-        # options:
-        #   - windows-latest
-        #   - windows-2022
-        #   - windows-2019
+        type: choice
+        options:
+          - windows-latest
+          - windows-2022
+          - windows-2019
 
 env:
   MODULE_DIR: .\Containers-Toolkit
@@ -30,7 +29,7 @@ env:
 
 jobs:
   lint:
-    runs-on: ${{ github.event.inputs.RUNNER }}
+    runs-on: ${{ github.event.inputs.RUNNER | windows-2022 }}
     defaults:
       run:
         working-directory: ./
@@ -69,7 +68,7 @@ jobs:
 
   pester:
     # TODO: Add Windows ARM64 support
-    runs-on: ${{ inputs.RUNNER }}
+    runs-on: ${{ github.event.inputs.RUNNER | windows-2022 }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
