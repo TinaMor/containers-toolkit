@@ -161,7 +161,7 @@ jobs:
         run: |
           cat ./coverage.xml
 
-      - name: Publish code coverage results
+      - name: Code coverage results
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
           filename: coverage.xml

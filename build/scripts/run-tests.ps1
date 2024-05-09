@@ -124,6 +124,7 @@ function ParseModuleNames {
 #######################################################
 ################ PESTER CONFIGURATION #################
 #######################################################
+# https://pester.dev/docs/commands/New-PesterConfiguration
 $config = [PesterConfiguration]::Default
 $config.Output.Verbosity = $Verbosity
 $config.Filter.Tag = ($tag -split ',')
@@ -132,6 +133,8 @@ $config.TestResult.Enabled = $true
 $config.TestResult.OutputFormat = "NUnitXML"
 $config.TestResult.OutputPath = "$RootDir\TestResults\Test-Results.xml"
 $config.CodeCoverage.Enabled = $true
+# $config.CodeCoverage.OutputFormat = "JaCoCo"
+$config.CodeCoverage.OutputFormat = "CoverageGutters"
 $config.CodeCoverage.OutputPath = "$RootDir\TestResults\coverage.xml"
 $config.CodeCoverage.Path = @( "$ModuleParentPath\Private", "$ModuleParentPath\Public" )
 $config.Run.Exit = $False
