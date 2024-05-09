@@ -13,9 +13,9 @@ on:
 
   workflow_dispatch:
     inputs:
-      image:
+      win-image:
         description: "Windows runner image"
-        required: true
+        required: false
         default: windows-2022
         type: choice
         options:
@@ -28,7 +28,7 @@ jobs:
     # FIXME: Fix runs-on not working
     # TODO: Add Windows ARM64 support
     # runs-on: windows-latest
-    runs-on: "${{ inputs.image }}"
+    runs-on: "${{ inputs.win-image }}"
     # defaults:
     #   run:
     #     working-directory: ./
