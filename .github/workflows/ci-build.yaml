@@ -30,10 +30,10 @@ env:
 jobs:
   lint:
     runs-on: ${{ github.event.inputs.RUNNER || 'windows-2022' }}
-    defaults:
-      run:
-        working-directory: ./
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       # TODO: Fix cache not working
       - name: Setup PowerShell module cache
         id: cacher
