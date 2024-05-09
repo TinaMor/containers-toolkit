@@ -154,7 +154,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: CTK.Coverage.Summary
-          path: ${{ env.PESTER_RESULTS_DIR }}
 
       - name: Print the files in the directory
         shell: bash
@@ -164,7 +163,7 @@ jobs:
       - name: Publish code coverage results
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: ${{ env.PESTER_RESULTS_DIR }}\coverage.xml
+          filename: coverage.xml
           fail_below_min: true
           format: markdown
           output: both
