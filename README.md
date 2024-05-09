@@ -2,6 +2,11 @@
 
 [![CI Build](https://github.com/microsoft/containers-toolkit/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/microsoft/containers-toolkit/actions/workflows/ci-build.yaml)
 [![DevSkim](https://github.com/microsoft/containers-toolkit/actions/workflows/sdl-compliance.yaml/badge.svg)](https://github.com/microsoft/containers-toolkit/actions/workflows/sdl-compliance.yaml)
+[![cf-image][]][cf-site]
+
+[cf-site]: https://www.codefactor.io/repository/github/powershell/powershell
+[cf-image]: https://www.codefactor.io/repository/github/powershell/powershell/badge
+
 
 # Table of contents
 
