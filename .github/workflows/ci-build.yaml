@@ -9,9 +9,20 @@ on:
       - "docs/**"
       - "*.md"
       - en-US/**"
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: "Windows runner image"
+        required: true
+        default: windows-2022
+        type: string
+        # type: choice
+        # options:
+        #   - windows-latest
+        #   - windows-2022
+        #   - windows-2019
 
 env:
-  RUNNER: windows-2022
   MODULE_DIR: .\Containers-Toolkit
   BUILD_SCRIPTS_DIR: .\build\scripts
   PESTER_RESULTS_DIR: .\TestResults
@@ -21,7 +32,7 @@ env:
 
 jobs:
   lint:
-    runs-on: ${{ env.RUNNER }}
+    runs-on: ${{ inputs.RUNNER }}
     steps:
       # TODO: Fix cache not working
       - name: Setup PowerShell module cache
@@ -57,7 +68,7 @@ jobs:
 
   pester:
     # TODO: Add Windows ARM64 support
-    runs-on: ${{ env.RUNNER }}
+    runs-on: ${{ inputs.RUNNER }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
