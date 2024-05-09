@@ -13,9 +13,9 @@ on:
 
   workflow_dispatch:
     inputs:
-      image:
+      win-image:
         description: "Windows runner image"
-        required: true
+        required: false
         default: windows-2022
         type: choice
         options:
@@ -35,7 +35,7 @@ jobs:
 
     strategy:
       matrix:
-        platform: ["${{ inputs.image }}"]
+        platform: ["${{ inputs. win-image }}"]
     runs-on: ${{ matrix.platform }}
 
     env:
