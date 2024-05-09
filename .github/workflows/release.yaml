@@ -1,3 +1,8 @@
+name: Create Container Toolkit Release
+
+
+
+
 # Checkout from the repository
 # Update the module version
 # Sign the module scripts
