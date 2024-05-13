@@ -36,6 +36,7 @@ function ConvertTo-MarkDown {
     $summary = $InputObject | Group-Object -Property Severity, RuleName -NoElement | Sort-Object Count -Descending
     $table = ConvertTo-MarkdownTable $summary
 
+    # FIXME: Table format gets ruined when details-tag is added
     return @(
         "### PSSciptAnalysis Report`n"
         "<details><summary>$IssueCountString</summary>`n"
