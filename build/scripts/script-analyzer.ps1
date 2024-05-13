@@ -18,8 +18,8 @@ $codeAnalysis = Invoke-ScriptAnalyzer -Path .\Containers-Toolkit\ -Recurse -Excl
 $lintIssues = $codeAnalysis | Where-Object { $_.Severity -notlike 'Error' }
 $lintErrors = $codeAnalysis | Where-Object { $_.Severity -like '*Error' }
 
+Write-Warning "$($lintIssues.Count) errors and $($lintIssues.Count) warnings found"
 if ($lintErrors -or $lintIssues) {
-    Write-Warning "$($lintIssues.Count) errors and $($lintIssues.Count) warnings found"
     Export-Clixml -Path 'psscriptanalysis.xml' -InputObject $codeAnalysis
 }
 
