@@ -57,7 +57,7 @@ jobs:
         shell: pwsh
         run: |
           ${{ env.BUILD_SCRIPTS_DIR }}\script-analyzer.ps1 >> lintresult.txt
-          cat lintresult.txt >> $GITHUB_STEP_SUMMARY
+          cat lintresult.txt >> $env:GITHUB_STEP_SUMMARY
 
       - name: Publish PSScriptAnalyzer results file
         uses: actions/upload-artifact@v4
