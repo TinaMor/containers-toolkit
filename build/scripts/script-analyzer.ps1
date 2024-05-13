@@ -17,7 +17,7 @@ function ConvertTo-MarkdownTable {
     foreach ($object in $InputObject) {
         $count = $object.Count
 
-        $name = $summary[0].Name -split ","
+        $name = $object.Name -split ","
         $severity = $name[0].Trim()
         $ruleName = $name[1].Trim()
 
