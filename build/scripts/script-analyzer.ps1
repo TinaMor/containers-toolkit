@@ -38,10 +38,8 @@ function ConvertTo-MarkDown {
 
     return @(
         "### PSSciptAnalysis Report`n"
-        "<details><summary>*$IssueCountString*</summary>`n"
-        "<p>"
+        "<details><summary>$IssueCountString</summary>`n"
         "$table"
-        "</p>"
         "</details>"
     ) -join ' '
 }
