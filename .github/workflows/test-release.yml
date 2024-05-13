@@ -1,0 +1,58 @@
+name: Create Containers.Toolkit release
+
+# configure manual trigger
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: "Release type"
+        required: false
+        default: patch
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+
+env:
+  MODULE_DIR: .\containers-toolkit
+  ROOT_DIR: .\
+
+jobs:
+  release:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update module version
+        id: update-version
+        shell: pwsh
+        run: |
+          $NewSemVer = .\build\scripts\update-version.ps1 -ReleaseType ${{ inputs.release-type }}
+          echo "NEW_VERSION=$NewSemVer" >> $env:GITHUB_OUTPUT
+
+      - name: Sign and archive signed module scripts
+        uses: ./.github/actions/sign-scripts
+
+      - name: Generate release note from template
+        shell: pwsh
+        run: |
+          $NewSemVer="${{ steps.update-version.outputs.NEW_VERSION }}"
+          $releaseNotes = [IO.File]::ReadAllText(".\build\hacks\release-notes-template.md")
+          $releaseNotes = $releaseNotes -replace "__NEW_VERSTION__", $NewSemVer
+          $releaseNotes | Out-File -FilePath ./release-note.txt -Encoding utf8 -Force
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ steps.update-version.outputs.NEW_VERSION }}"
+          gh release create -F ./release-note.txt --draft --title "v${tag}" "v${tag}" containers-toolkit/*
+
+      - name: Publish containers-toolkit to PS Gallery
+        shell: pwsh
+        run: |
+          $ReleaseNotes = cat /tmp/release-note.txt 
+          Publish-Module -Path ${{ env.MODULE_DIR }} -NuGetApiKey {{ secrets.NUGET_APIKEY }}
