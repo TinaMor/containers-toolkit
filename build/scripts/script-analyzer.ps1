@@ -16,7 +16,7 @@ Import-Module -Name PSScriptAnalyzer -Force
 $RootDir = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Write-Host "RootDir: $RootDir" -ForegroundColor DarkCyan
 
-ls- R $RootDir
+ls -R $RootDir
 
 $codeAnalysis = Invoke-ScriptAnalyzer -Path .\Containers-Toolkit\ -Recurse -ExcludeRule PSProvideCommentHelp
 
