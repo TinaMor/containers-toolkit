@@ -33,7 +33,7 @@ function ConvertTo-MarkDown {
         [String]$IssueCountString
     )
 
-    $summary = $InputObject | Group-Object -Property Severity, RuleName -NoElement
+    $summary = $InputObject | Group-Object -Property Severity, RuleName -NoElement | Sort-Object Count -Descending
     $table = ConvertTo-MarkdownTable $summary
 
     return @(
