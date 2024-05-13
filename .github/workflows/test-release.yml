@@ -26,6 +26,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # FIXME: Fix cache not working
+      - name: Setup PowerShell module cache
+        id: cacher
+        uses: actions/cache@v3
+        with:
+          path: "C:\\program files\\powershell\\7\\Modules"
+          key: ${{ runner.os }}-CTK
+
+      - name: Install required PowerShell modules
+        if: steps.cacher.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          Get-Command "Get-HNSNetwork"
+
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          $requiredModules = @('ThreadJob', 'HNS')
+          $missingModules = $requiredModules | Where-Object { -not (Get-Module -ListAvailable -Name $_) }
+
+          if ($missingModules) {
+            Write-Host "Modules to install: $($missingModules -join ', ')"
+            Install-Module $missingModules -ErrorAction Stop -AllowClobber -SkipPublisherCheck -Force
+          }
+
       - name: Update module version
         id: update-version
         shell: pwsh
