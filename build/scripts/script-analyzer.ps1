@@ -6,7 +6,7 @@
 #                                                                         #
 ###########################################################################
 
-$ErrorActionPreference = 'Stop'
+# $ErrorActionPreference = 'Stop'
 
 if (!(Get-Module -Name PSScriptAnalyzer -ListAvailable)) {
     Install-Module -Name PSScriptAnalyzer -Scope CurrentUser
