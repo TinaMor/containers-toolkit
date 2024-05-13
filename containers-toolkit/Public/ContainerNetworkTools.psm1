@@ -314,13 +314,20 @@ function Import-HNSModule {
         [Switch] $Force
     )
 
+    $ModuleName = 'HostNetworkingService'
+    if ((Get-Module -ListAvailable -Name $ModuleName)) {
+        Import-Module -Name $ModuleName -DisableNameChecking -Force
+        return
+    }
+
+    $ModuleName = 'HNS'
     try {
         # https://www.powershellgallery.com/packages/HNS/0.2.4
-        if ($null -eq ( Get-Module -ListAvailable -Name 'HNS')) {
-            Install-Module -Name HNS -Scope CurrentUser -AllowClobber -Force:$Force
+        if ($null -eq ( Get-Module -ListAvailable -Name $ModuleName)) {
+            Install-Module -Name $ModuleName -Scope CurrentUser -AllowClobber -Force:$Force
         }
 
-        Import-Module -Name HNS -DisableNameChecking -Force
+        Import-Module -Name $ModuleName -DisableNameChecking -Force
     }
     catch {
         $WinCNIPath = "$Env:ProgramFiles\containerd\cni"

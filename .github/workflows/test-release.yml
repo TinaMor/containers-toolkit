@@ -38,8 +38,6 @@ jobs:
         if: steps.cacher.outputs.cache-hit != 'true'
         shell: pwsh
         run: |
-          Get-Command "Get-HNSNetwork"
-
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           $requiredModules = @('ThreadJob', 'HNS')
           $missingModules = $requiredModules | Where-Object { -not (Get-Module -ListAvailable -Name $_) }

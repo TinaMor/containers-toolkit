@@ -30,7 +30,7 @@ CompanyName = 'Microsoft Corporation'
 Copyright = '(c) Microsoft Corporation. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'PowerShell functions that allow you to download, install, and configure Containerd, Buildkit, nerdctl, and Windows CNI plugins'
+Description = 'PowerShell functions that allow you to download, install, and configure Containerd, Buildkit, nerdctl, and Windows CNI plugins.Requires modules ThreadJob and HostNetworkingService or HNS'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '5.0'
@@ -51,8 +51,7 @@ PowerShellVersion = '5.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @('HNS', 
-               'ThreadJob')
+RequiredModules = @( 'ThreadJob', "HNS" )
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
