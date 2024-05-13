@@ -49,7 +49,7 @@ function main {
     $lintIssues = $codeAnalysis | Where-Object { $_.Severity -notlike 'Error' }
     $lintErrors = $codeAnalysis | Where-Object { $_.Severity -like '*Error' }
 
-    $IssueCountString = "$($lintIssues.Count) errors and $($lintIssues.Count) warnings found"
+    $IssueCountString = "$($lintErrors.Count) errors and $($lintIssues.Count) warnings found"
     Write-Warning $IssueCountString
 
     if ($lintErrors -or $lintIssues) {
