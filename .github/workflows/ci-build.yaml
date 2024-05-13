@@ -56,8 +56,8 @@ jobs:
       - name: Run code analysis with PSScriptAnalyzer
         shell: pwsh
         run: |
-          ${{ env.BUILD_SCRIPTS_DIR }}\script-analyzer.ps1 >> Out-File -FilePath lintresult.txt -Encoding utf8 -Force
-          cat lintresult.txt >> $env:GITHUB_STEP_SUMMARY
+          ${{ env.BUILD_SCRIPTS_DIR }}\script-analyzer.ps1 >> Out-File -FilePath lintsummary.md -Encoding utf8 -Force
+          cat lintsummary.md >> $env:GITHUB_STEP_SUMMARY
 
       - name: Publish PSScriptAnalyzer results file
         uses: actions/upload-artifact@v4
