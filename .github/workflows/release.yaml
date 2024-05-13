@@ -1,9 +1,6 @@
 name: Create Containers.Toolkit release
-# on:
-#   push:
-#     tags:
-#       - "v*"
 
+# configure manual trigger
 on:
   workflow_dispatch:
     inputs:
