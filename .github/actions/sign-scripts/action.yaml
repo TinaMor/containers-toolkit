@@ -1,55 +1,105 @@
-# https://tech.nicolonsky.ch/github-actions-powershell-signing/
-
 name: Sign PowerShell Scripts
 description: Sign PowerShell scripts in the Containers-Toolkit repository
 
-inputs:
-  dir_path:
-    description: "Directory containing PowerShell files to sign"
-    required: true
-  output_artifact_name:
-    description: "Name of the artifact to publish"
-    required: true
+# inputs:
+#   dir_path:
+#     description: "Directory containing PowerShell files to sign"
+#     required: true
+#   output_artifact_name:
+#     description: "Name of the artifact to publish"
+#     required: true
 
 runs:
   using: "composite"
   steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
-    - name: Import code signing certificate
-      shell: powershell
-      run: |
-        $pfxCertFilePath = Join-Path -Path $PSScriptRoot -ChildPath "CodeSigningCertificate.pfx"
-        Set-Content -Value $([System.Convert]::FromBase64String($env:BASE64_PFX)) -Path $pfxCertFilePath -Encoding Byte
-        $codeSigningCert = Import-PfxCertificate -FilePath $pfxCertFilePath -Password $($env:PFX_PASSWORD | ConvertTo-SecureString -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
-      env:
-        BASE64_PFX: ${{ secrets.BASE64_PFX }}
-        PFX_PASSWORD: ${{ secrets.PFX_PASSWORD }}
 
-    - name: Sign PowerShell scripts
-      shell: powershell
-      run: |
-        # remove git dir from checked out repo
-        Get-ChildItem -Path "." -Filter ".git*" -Force | ForEach-Object {Remove-Item -Path $_.FullName -Recurse -Force}
-        # Get scripts to sign
-        $scripts = Get-ChildItem -Path . -Recurse -ErrorAction Stop | Where-Object {$_.name -match "ps[d|m]?1(xml)?"}
-        # load cert
-        $codeSigningCert = Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert | Select-Object -First 1
-        foreach ($script in $scripts) {
-            try {
-                  $scriptContent = Get-Content -Path $script.FullName
-                  Write-Output "Signing script `"$($script.Name)`" with certificate `"$($codeSigningCert.Thumbprint)`""
-                  # sign script
-                  $null = Set-AuthenticodeSignature -Certificate $codeSigningCert -FilePath $script.FullName -TimestampServer "http://timestamp.comodoca.com/rfc3161"
-            }
-            catch {
-                Write-Error $_
-            }
-        }
-
-    - name: Publish signed scripts to GitHub Artifacts
-      uses: actions/upload-artifact@v2
+    - name: Setup .NET Core # Required to execute ReportGenerator
+      uses: actions/setup-dotnet@v3
       with:
-        name: ${{ inputs.output_artifact_name }}
-        path: .
+        dotnet-version: 8.x
+        dotnet-quality: "ga"
+
+    - uses: actions/cache@v3
+      with:
+        path: ~/.dotnet/tools
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-nuget-azuresigntool
+
+    - name: Install AzureSignTool
+      shell: pwsh
+      run: dotnet tool install --global AzureSignTool
+
+    # https://learn.microsoft.com/en-us/windows/msix/desktop/cicd-keyvault
+    # https://learn.microsoft.com/en-us/previous-versions/windows/hardware/design/dn653556(v=vs.85)
+    - name: Sign PowerShell scripts
+      shell: pwsh
+      run: |
+          # Get scripts to sign
+          $scripts = Get-ChildItem -Path . -Recurse -ErrorAction Stop | Where-Object { $_.name -match "ps[d|m]?1(xml)?" }
+
+          # Sign the scripts
+          foreach ($script in $scripts) {
+              Write-Host "Signing file: $_.Name"
+              $filePath = $_.FullName
+              & AzureSignTool sign -kvu "${{ secrets.AzureKeyVaultUrl }}" `
+                  -kvi "${{ secrets.AzureKeyVaultClientId }}" `
+                  -kvs "${{ secrets.AzureKeyVaultClientSecret }}" `
+                  -kvc ${{ secrets.AzureKeyVaultName }} `
+              -tr http://timestamp.digicert.com -v $filePath
+          }
+
+    # # Commit the changes
+    # - name: Commit changes
+    #   shell: bash
+    #   run: |
+    #     # configure user
+    #     git config --global user.name "${{ github.actor }}"
+    #     git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+    #     # Stage and commit signed files
+    #     git add .
+    #     git commit -m 'Sign PowerShell scripts'
+
+    #     # push the commit back up to source GitHub repository
+    #     git push
+
+
+      # https://tech.nicolonsky.ch/github-actions-powershell-signing/
+    # - name: Import code signing certificate
+    #   shell: powershell
+    #   run: |
+    #     $pfxCertFilePath = Join-Path -Path $PSScriptRoot -ChildPath "CodeSigningCertificate.pfx"
+    #     Set-Content -Value $([System.Convert]::FromBase64String($env:BASE64_PFX)) -Path $pfxCertFilePath -Encoding Byte
+    #     $codeSigningCert = Import-PfxCertificate -FilePath $pfxCertFilePath -Password $($env:PFX_PASSWORD | ConvertTo-SecureString -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
+    #   env:
+    #     BASE64_PFX: ${{ secrets.BASE64_PFX }}
+    #     PFX_PASSWORD: ${{ secrets.PFX_PASSWORD }}
+
+    # - name: Sign PowerShell scripts
+    #   shell: powershell
+    #   run: |
+    #     # remove git dir from checked out repo
+    #     Get-ChildItem -Path "." -Filter ".git*" -Force | ForEach-Object {Remove-Item -Path $_.FullName -Recurse -Force}
+    #     # Get scripts to sign
+    #     $scripts = Get-ChildItem -Path . -Recurse -ErrorAction Stop | Where-Object {$_.name -match "ps[d|m]?1(xml)?"}
+    #     # load cert
+    #     $codeSigningCert = Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert | Select-Object -First 1
+    #     foreach ($script in $scripts) {
+    #         try {
+    #               $scriptContent = Get-Content -Path $script.FullName
+    #               Write-Output "Signing script `"$($script.Name)`" with certificate `"$($codeSigningCert.Thumbprint)`""
+    #               # sign script
+    #               $null = Set-AuthenticodeSignature -Certificate $codeSigningCert -FilePath $script.FullName -TimestampServer "http://timestamp.comodoca.com/rfc3161"
+    #         }
+    #         catch {
+    #             Write-Error $_
+    #         }
+    #     }
+
+    # - name: Publish signed scripts to GitHub Artifacts
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: ${{ inputs.output_artifact_name }}
+    #     path: .
