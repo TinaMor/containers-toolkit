@@ -1,13 +1,3 @@
-44 errors and 44 warnings found
-### PSSciptAnalysis Report
- *44 errors and 44 warnings found*
- | Rule Name | Severity | Count |
-| -------- | ------- | ------- |
-| PSAvoidTrailingWhitespace | Information | 19 |
-| PSAvoidTrailingWhitespace | Information | 11 |
-| PSAvoidTrailingWhitespace | Information | 1 |
-| PSAvoidTrailingWhitespace | Information | 7 |
-| PSAvoidTrailingWhitespace | Information | 6 |
 ### PSSciptAnalysis Report
  *44 errors and 44 warnings found*
  | Rule Name | Severity | Count |

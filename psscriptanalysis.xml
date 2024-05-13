@@ -1743,46 +1743,8 @@
         <TNRef RefId="1" />
         <ToString>Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord</ToString>
         <Props>
-          <S N="Message">File 'ContainerdTools.psm1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work when there is no host, and (prior to PS 5.0) cannot be suppressed, captured, or redirected. Instead, use Write-Output, Write-Verbose, or Write-Information.</S>
-          <Obj N="Extent" RefId="158">
-            <TNRef RefId="7" />
-            <ToString>Write-Host "For containerd usage: run 'containerd -h'" -ForegroundColor DarkGreen</ToString>
-            <Props>
-              <S N="File">C:\Work\containers-toolkit\Containers-Toolkit\Public\ContainerdTools.psm1</S>
-              <S N="StartScriptPosition">System.Management.Automation.Language.InternalScriptPosition</S>
-              <S N="EndScriptPosition">System.Management.Automation.Language.InternalScriptPosition</S>
-              <I32 N="StartLineNumber">123</I32>
-              <I32 N="StartColumnNumber">13</I32>
-              <I32 N="EndLineNumber">123</I32>
-              <I32 N="EndColumnNumber">94</I32>
-              <S N="Text">Write-Host "For containerd usage: run 'containerd -h'" -ForegroundColor DarkGreen</S>
-              <I32 N="StartOffset">5210</I32>
-              <I32 N="EndOffset">5291</I32>
-            </Props>
-          </Obj>
-          <S N="RuleName">PSAvoidUsingWriteHost</S>
-          <Obj N="Severity" RefId="159">
-            <TNRef RefId="3" />
-            <ToString>Warning</ToString>
-            <U32>1</U32>
-          </Obj>
-          <S N="ScriptName">ContainerdTools.psm1</S>
-          <S N="ScriptPath">C:\Work\containers-toolkit\Containers-Toolkit\Public\ContainerdTools.psm1</S>
-          <Nil N="RuleSuppressionID" />
-          <Nil N="SuggestedCorrections" />
-          <B N="IsSuppressed">false</B>
-        </Props>
-        <MS>
-          <I32 N="Line">123</I32>
-          <I32 N="Column">13</I32>
-        </MS>
-      </Obj>
-      <Obj RefId="160">
-        <TNRef RefId="1" />
-        <ToString>Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord</ToString>
-        <Props>
           <S N="Message">Invoke-Expression is used. Please remove Invoke-Expression from script and find other options instead.</S>
-          <Obj N="Extent" RefId="161">
+          <Obj N="Extent" RefId="158">
             <TNRef RefId="7" />
             <ToString>Invoke-Expression -Command $command</ToString>
             <Props>
@@ -1799,7 +1761,7 @@
             </Props>
           </Obj>
           <S N="RuleName">PSAvoidUsingInvokeExpression</S>
-          <Obj N="Severity" RefId="162">
+          <Obj N="Severity" RefId="159">
             <TNRef RefId="3" />
             <ToString>Warning</ToString>
             <U32>1</U32>
@@ -1815,12 +1777,12 @@
           <I32 N="Column">21</I32>
         </MS>
       </Obj>
-      <Obj RefId="163">
+      <Obj RefId="160">
         <TNRef RefId="1" />
         <ToString>Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord</ToString>
         <Props>
           <S N="Message">Invoke-Expression is used. Please remove Invoke-Expression from script and find other options instead.</S>
-          <Obj N="Extent" RefId="164">
+          <Obj N="Extent" RefId="161">
             <TNRef RefId="7" />
             <ToString>Invoke-Expression -Command "&amp; '$containerdExecutable' config default"</ToString>
             <Props>
@@ -1837,7 +1799,7 @@
             </Props>
           </Obj>
           <S N="RuleName">PSAvoidUsingInvokeExpression</S>
-          <Obj N="Severity" RefId="165">
+          <Obj N="Severity" RefId="162">
             <TNRef RefId="3" />
             <ToString>Warning</ToString>
             <U32>1</U32>
@@ -1850,6 +1812,44 @@
         </Props>
         <MS>
           <I32 N="Line">202</I32>
+          <I32 N="Column">13</I32>
+        </MS>
+      </Obj>
+      <Obj RefId="163">
+        <TNRef RefId="1" />
+        <ToString>Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord</ToString>
+        <Props>
+          <S N="Message">File 'ContainerdTools.psm1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work when there is no host, and (prior to PS 5.0) cannot be suppressed, captured, or redirected. Instead, use Write-Output, Write-Verbose, or Write-Information.</S>
+          <Obj N="Extent" RefId="164">
+            <TNRef RefId="7" />
+            <ToString>Write-Host "For containerd usage: run 'containerd -h'" -ForegroundColor DarkGreen</ToString>
+            <Props>
+              <S N="File">C:\Work\containers-toolkit\Containers-Toolkit\Public\ContainerdTools.psm1</S>
+              <S N="StartScriptPosition">System.Management.Automation.Language.InternalScriptPosition</S>
+              <S N="EndScriptPosition">System.Management.Automation.Language.InternalScriptPosition</S>
+              <I32 N="StartLineNumber">123</I32>
+              <I32 N="StartColumnNumber">13</I32>
+              <I32 N="EndLineNumber">123</I32>
+              <I32 N="EndColumnNumber">94</I32>
+              <S N="Text">Write-Host "For containerd usage: run 'containerd -h'" -ForegroundColor DarkGreen</S>
+              <I32 N="StartOffset">5210</I32>
+              <I32 N="EndOffset">5291</I32>
+            </Props>
+          </Obj>
+          <S N="RuleName">PSAvoidUsingWriteHost</S>
+          <Obj N="Severity" RefId="165">
+            <TNRef RefId="3" />
+            <ToString>Warning</ToString>
+            <U32>1</U32>
+          </Obj>
+          <S N="ScriptName">ContainerdTools.psm1</S>
+          <S N="ScriptPath">C:\Work\containers-toolkit\Containers-Toolkit\Public\ContainerdTools.psm1</S>
+          <Nil N="RuleSuppressionID" />
+          <Nil N="SuggestedCorrections" />
+          <B N="IsSuppressed">false</B>
+        </Props>
+        <MS>
+          <I32 N="Line">123</I32>
           <I32 N="Column">13</I32>
         </MS>
       </Obj>
