@@ -67,130 +67,130 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-  # pester:
-  #   # TODO: Add Windows ARM64 support
-  #   runs-on: ${{ github.event.inputs.RUNNER || 'windows-2022' }}
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+  pester:
+    # TODO: Add Windows ARM64 support
+    runs-on: ${{ github.event.inputs.RUNNER || 'windows-2022' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  #     # TODO: Fix cache not working
-  #     - name: Setup PowerShell module cache
-  #       id: cacher
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: "C:\\program files\\powershell\\7\\Modules"
-  #         key: ${{ runner.os }}-CTK
+      # TODO: Fix cache not working
+      - name: Setup PowerShell module cache
+        id: cacher
+        uses: actions/cache@v3
+        with:
+          path: "C:\\program files\\powershell\\7\\Modules"
+          key: ${{ runner.os }}-CTK
 
-  #     - name: Install required PowerShell modules
-  #       if: steps.cacher.outputs.cache-hit != 'true'
-  #       shell: pwsh
-  #       run: |
-  #         Get-Command "Get-HNSNetwork"
+      - name: Install required PowerShell modules
+        if: steps.cacher.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          Get-Command "Get-HNSNetwork"
 
-  #         Set-PSRepository PSGallery -InstallationPolicy Trusted
-  #         $requiredModules = @('Pester', 'ThreadJob', 'HNS')
-  #         $missingModules = $requiredModules | Where-Object { -not (Get-Module -ListAvailable -Name $_) }
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          $requiredModules = @('Pester', 'ThreadJob', 'HNS')
+          $missingModules = $requiredModules | Where-Object { -not (Get-Module -ListAvailable -Name $_) }
 
-  #         if ($missingModules) {
-  #           Write-Host "Modules to install: $($missingModules -join ', ')"
-  #           Install-Module $missingModules -ErrorAction Stop -AllowClobber -SkipPublisherCheck -Force
-  #         }
+          if ($missingModules) {
+            Write-Host "Modules to install: $($missingModules -join ', ')"
+            Install-Module $missingModules -ErrorAction Stop -AllowClobber -SkipPublisherCheck -Force
+          }
 
-  #     - name: Run Pester tests
-  #       shell: pwsh
-  #       run: |
-  #         $ErrorActionPreference = 'Continue'
-  #         ${{ env.BUILD_SCRIPTS_DIR }}\run-tests.ps1
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Continue'
+          ${{ env.BUILD_SCRIPTS_DIR }}\run-tests.ps1
 
-  #     - name: Publish Pester results
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: CTK.Pester.Results
-  #         path: ${{ env.PESTER_RESULTS_DIR }}\Test-Results.xml
-  #         if-no-files-found: error
-  #         overwrite: true
+      - name: Publish Pester results
+        uses: actions/upload-artifact@v4
+        with:
+          name: CTK.Pester.Results
+          path: ${{ env.PESTER_RESULTS_DIR }}\Test-Results.xml
+          if-no-files-found: error
+          overwrite: true
 
-  #     - name: Publish code coverage results
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: CTK.Coverage.Summary
-  #         path: ${{ env.PESTER_RESULTS_DIR }}\coverage.xml
-  #         if-no-files-found: error
-  #         overwrite: true
+      - name: Publish code coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: CTK.Coverage.Summary
+          path: ${{ env.PESTER_RESULTS_DIR }}\coverage.xml
+          if-no-files-found: error
+          overwrite: true
 
-  #     # FIXME: Error: Container action is only supported on Linux
-  #     # - name: Publish code coverage results
-  #     #   uses: irongut/CodeCoverageSummary@v1.3.0
-  #     #   with:
-  #     #     filename: ${{ env.PESTER_RESULTS_DIR }}\coverage.xml
-  #     #     fail_below_min: true
-  #     #     format: markdown
-  #     #     output: both
+      # FIXME: Error: Container action is only supported on Linux
+      # - name: Publish code coverage results
+      #   uses: irongut/CodeCoverageSummary@v1.3.0
+      #   with:
+      #     filename: ${{ env.PESTER_RESULTS_DIR }}\coverage.xml
+      #     fail_below_min: true
+      #     format: markdown
+      #     output: both
 
-  #     # - name: Publish module scripts to GitHub Artifacts
-  #     #   uses: actions/upload-artifact@v4
-  #     #   with:
-  #     #     name: ${{ env.MODULE_ARTIFACT }}
-  #     #     path: ${{ env.MODULE_DIR }}
-  #     #     if-no-files-found: error
-  #     #     overwrite: true
+      # - name: Publish module scripts to GitHub Artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.MODULE_ARTIFACT }}
+      #     path: ${{ env.MODULE_DIR }}
+      #     if-no-files-found: error
+      #     overwrite: true
 
-  #     # - name: Publish entire dir to GitHub Artifacts
-  #     #   uses: actions/upload-artifact@v4
-  #     #   with:
-  #     #     name: ${{ env.REPO_ARTIFACT }}
-  #     #     path: .
-  #     #     if-no-files-found: error
-  #     #     overwrite: true
+      # - name: Publish entire dir to GitHub Artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.REPO_ARTIFACT }}
+      #     path: .
+      #     if-no-files-found: error
+      #     overwrite: true
 
-  #   # # The always() function configures the job to continue processing even if there are test failures
-  #   # if: ${{ always() }}
+    # # The always() function configures the job to continue processing even if there are test failures
+    # if: ${{ always() }}
 
-  # test-coverage:
-  #   needs: pester
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Download coverage results artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: CTK.Coverage.Summary
+  test-coverage:
+    needs: pester
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download coverage results artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: CTK.Coverage.Summary
 
-  #     # FIXME: Replace with the https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary
-  #     # https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
-  #     # https://github.com/PowerShell/PowerShell/blob/11a7448d7a03fb4d86618ab5783608127df2056d/test/tools/OpenCover/OpenCover.psm1#L288
-  #     # https://devblogs.microsoft.com/powershell/code-coverage-now-available-for-powershell-core/
-  #     # https://github.com/PowerShell/PowerShell/blob/master/docs/testing-guidelines/getting-code-coverage.md
-  #     # https://github.com/danielpalme/ReportGenerator
-  #     # https://github.com/marketplace/actions/reportgenerator
-  #     # https://reportgenerator.io/usage
+      # FIXME: Replace with the https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary
+      # https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
+      # https://github.com/PowerShell/PowerShell/blob/11a7448d7a03fb4d86618ab5783608127df2056d/test/tools/OpenCover/OpenCover.psm1#L288
+      # https://devblogs.microsoft.com/powershell/code-coverage-now-available-for-powershell-core/
+      # https://github.com/PowerShell/PowerShell/blob/master/docs/testing-guidelines/getting-code-coverage.md
+      # https://github.com/danielpalme/ReportGenerator
+      # https://github.com/marketplace/actions/reportgenerator
+      # https://reportgenerator.io/usage
 
-  #     - name: Setup .NET Core # Required to execute ReportGenerator
-  #       uses: actions/setup-dotnet@v3
-  #       with:
-  #         dotnet-version: 8.x
-  #         dotnet-quality: "ga"
+      - name: Setup .NET Core # Required to execute ReportGenerator
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.x
+          dotnet-quality: "ga"
 
-  #     - name: ReportGenerator
-  #       uses: danielpalme/ReportGenerator-GitHub-Action@5.2.4
-  #       with:
-  #         reports: coverage.xml
-  #         targetdir: coveragereport
-  #         reporttypes: HtmlInline;MarkdownSummaryGithub;Badges
-  #         historydir: coveragehistory
+      - name: ReportGenerator
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.2.4
+        with:
+          reports: coverage.xml
+          targetdir: coveragereport
+          reporttypes: HtmlInline;MarkdownSummaryGithub;Badges
+          historydir: coveragehistory
 
-  #     - name: Upload coverage report artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: coveragereport # Artifact name
-  #         path: coveragereport # Directory containing files to upload
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coveragereport # Artifact name
+          path: coveragereport # Directory containing files to upload
 
-  #     - name: Publish coverage summary
-  #       uses: marocchino/sticky-pull-request-comment@v2
-  #       continue-on-error: true
-  #       with:
-  #         path: coveragereport/SummaryGithub.md
+      - name: Publish coverage summary
+        uses: marocchino/sticky-pull-request-comment@v2
+        continue-on-error: true
+        with:
+          path: coveragereport/SummaryGithub.md
 
-  #     - name: Post results
-  #       run: |
-  #         cat coveragereport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+      - name: Post results
+        run: |
+          cat coveragereport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY

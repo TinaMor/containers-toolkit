@@ -4,8 +4,8 @@ name: Sign PowerShell Scripts
 description: Sign PowerShell scripts in the Containers-Toolkit repository
 
 inputs:
-  input_artifact_name:
-    description: "Name of the artifact to sign"
+  dir_path:
+    description: "Directory containing PowerShell files to sign"
     required: true
   output_artifact_name:
     description: "Name of the artifact to publish"
@@ -14,6 +14,9 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
     - name: Import code signing certificate
       shell: powershell
       run: |
@@ -23,11 +26,6 @@ runs:
       env:
         BASE64_PFX: ${{ secrets.BASE64_PFX }}
         PFX_PASSWORD: ${{ secrets.PFX_PASSWORD }}
-
-    - name: Download Container Toolkit scripts
-      uses: actions/download-artifact@v4
-      with:
-        name: ${{ inputs.input_artifact_name }}
 
     - name: Sign PowerShell scripts
       shell: powershell
