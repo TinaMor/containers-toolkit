@@ -46,7 +46,7 @@ runs:
       shell: pwsh
       run: |
           # Get scripts to sign
-          $scripts = Get-ChildItem -Path . -Recurse -ErrorAction Stop | Where-Object { $_.name -match "ps[d|m]?1(xml)?" }
+          $scripts = Get-ChildItem -Path ./ -Recurse -ErrorAction Stop | Where-Object { $_.name -match "ps[d|m]?1(xml)?" }
 
           # Sign the scripts
           foreach ($script in $scripts) {

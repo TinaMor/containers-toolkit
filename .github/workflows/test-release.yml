@@ -1,4 +1,4 @@
-name: Create Containers.Toolkit release
+name: Release
 
 # configure manual trigger
 on:
