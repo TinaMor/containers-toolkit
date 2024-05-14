@@ -78,11 +78,13 @@ jobs:
           $releaseNotes | Out-File -FilePath ./release-note.txt -Encoding utf8 -Force
 
       - name: Create release
+        shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="${{ steps.update-version.outputs.NEW_VERSION }}"
-          gh release create -F ./release-note.txt --draft --title "v${tag}" "v${tag}" containers-toolkit/*
+          $tag="${{ steps.update-version.outputs.NEW_VERSION }}"
+          $vtag = "v${tag}"
+          gh release create -F ./release-note.txt --draft --title "${vtag}" "${vtag}" containers-toolkit/*
 
       - name: Publish containers-toolkit to PS Gallery
         shell: pwsh
@@ -90,3 +92,9 @@ jobs:
           $ReleaseNotes = cat /tmp/release-note.txt 
           Get-ChildItem -Recurse "${{ env.MODULE_DIR }}"
           Publish-Module -Path ${{ env.MODULE_DIR }} -NuGetApiKey {{ secrets.NUGET_APIKEY }}
+
+      - name: Post results
+        shell: pwsh
+        run: |
+          $tag="${{ steps.update-version.outputs.NEW_VERSION }}"
+          echo ":rocket Succefully released Containers.Toolkit v$tag" >> $GITHUB_STEP_SUMMARY

@@ -39,9 +39,14 @@ function ConvertTo-MarkDown {
     # FIXME: Table format gets ruined when details-tag is added
     return @(
         "### PSSciptAnalysis Report`n"
-        "<details><summary>$IssueCountString</summary>`n"
+        "<details>"
+        "<summary>$IssueCountString</summary>`n"
+        # blank lines are needed before/after a section of markdown that is within an html tag, 
+        # otherwise the markdown won't work
+        "`n"
         "$table"
-        "</details>"
+        "`n"
+        "`n</details>"
     ) -join ' '
 }
 
