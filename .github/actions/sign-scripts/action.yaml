@@ -21,9 +21,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
     - name: Setup .NET Core # Required to execute ReportGenerator
       uses: actions/setup-dotnet@v3
       with:
@@ -52,13 +49,13 @@ runs:
           foreach ($script in $scripts) {
               Write-Host "Signing file: $_.Name"
               $filePath = $_.FullName
-              & AzureSignTool sign -v $filePath `
+              & AzureSignTool sign `
                   -kvu "${{ inputs.AzureKeyVaultUrl }}" `
                   -kvi "${{ inputs.AzureKeyVaultClientId }}" `
                   -kvs "${{ inputs.AzureKeyVaultClientSecret }}" `
                   -kvt "${{ inputs.AzureKeyVaultTenantId }}" `
                   -kvc "${{ inputs.AzureKeyVaultCertificate }}" `
-              -tr http://timestamp.digicert.com 
+                  -tr http://timestamp.digicert.com -v $filePath 
           }
 
     # # Commit the changes
