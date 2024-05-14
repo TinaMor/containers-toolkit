@@ -88,4 +88,5 @@ jobs:
         shell: pwsh
         run: |
           $ReleaseNotes = cat /tmp/release-note.txt 
+          Get-ChildItem -Recurse "${{ env.MODULE_DIR }}"
           Publish-Module -Path ${{ env.MODULE_DIR }} -NuGetApiKey {{ secrets.NUGET_APIKEY }}
