@@ -1,13 +1,19 @@
 name: Sign PowerShell Scripts
 description: Sign PowerShell scripts in the Containers-Toolkit repository
 
-# inputs:
-#   dir_path:
-#     description: "Directory containing PowerShell files to sign"
-#     required: true
-#   output_artifact_name:
-#     description: "Name of the artifact to publish"
-#     required: true
+inputs:
+  AzureKeyVaultName:
+    description: "The friendly name of your vault."
+    required: true
+  AzureKeyVaultUrl:
+    description: "The URL of your vault."
+    required: true
+  AzureKeyVaultClientId:
+    description: "The application id of your Azure application."
+    required: true
+  AzureKeyVaultClientSecret:
+    description: "The client secret of your Azure application."
+    required: true
 
 runs:
   using: "composite"
@@ -35,11 +41,6 @@ runs:
     # https://learn.microsoft.com/en-us/previous-versions/windows/hardware/design/dn653556(v=vs.85)
     - name: Sign PowerShell scripts
       shell: pwsh
-      env: 
-        AZUREKEYVAULTURL: ${{ secrets.AZUREKEYVAULTURL }}
-        AZUREKEYVAULTCLIENTID: ${{ secrets.AZUREKEYVAULTCLIENTID }}
-        AZUREKEYVAULTCLIENTSECRET: ${{ secrets.AZUREKEYVAULTCLIENTSECRET }}
-        AZUREKEYVAULTNAME: ${{ secrets.AZUREKEYVAULTNAME }}
       run: |
           # Get scripts to sign
           $scripts = Get-ChildItem -Path . -Recurse -ErrorAction Stop | Where-Object { $_.name -match "ps[d|m]?1(xml)?" }
@@ -48,10 +49,10 @@ runs:
           foreach ($script in $scripts) {
               Write-Host "Signing file: $_.Name"
               $filePath = $_.FullName
-              & AzureSignTool sign -kvu "$env:AZUREKEYVAULTURL" `
-                  -kvi "$env:AZUREKEYVAULTCLIENTID" `
-                  -kvs "$env:AZUREKEYVAULTCLIENTSECRET" `
-                  -kvc "$env:AZUREKEYVAULTNAME" `
+              & AzureSignTool sign -kvu "${{ inputs.AzureKeyVaultUrl }}" `
+                  -kvi "${{ inputs.AzureKeyVaultClientId }}" `
+                  -kvs "${{ inputs.AzureKeyVaultClientSecret }}" `
+                  -kvc "${{ inputs.AzureKeyVaultName }}" `
               -tr http://timestamp.digicert.com -v $filePath
           }
 
@@ -76,8 +77,8 @@ runs:
     #   shell: powershell
     #   run: |
     #     $pfxCertFilePath = Join-Path -Path $PSScriptRoot -ChildPath "CodeSigningCertificate.pfx"
-    #     Set-Content -Value $([System.Convert]::FromBase64String($env:BASE64_PFX)) -Path $pfxCertFilePath -Encoding Byte
-    #     $codeSigningCert = Import-PfxCertificate -FilePath $pfxCertFilePath -Password $($env:PFX_PASSWORD | ConvertTo-SecureString -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
+    #     Set-Content -Value $([System.Convert]::FromBase64String(${{ inputs.BASE64_PFX)) -Path $pfxCertFilePath -Encoding B }}yte
+    #     $codeSigningCert = Import-PfxCertificate -FilePath $pfxCertFilePath -Password $(${{ inputs.PFX_PASSWORD | ConvertTo-SecureString -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser }}\My
     #   env:
     #     BASE64_PFX: ${{ secrets.BASE64_PFX }}
     #     PFX_PASSWORD: ${{ secrets.PFX_PASSWORD }}
