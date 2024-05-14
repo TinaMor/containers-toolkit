@@ -47,7 +47,7 @@ runs:
 
           # Sign the scripts
           foreach ($script in $scripts) {
-              Write-Host "Signing file: $_.Name"
+              Write-Host "Signing file: $script_.Name"
               $filePath = $_.FullName
               & AzureSignTool sign `
                   -kvu "${{ inputs.AzureKeyVaultUrl }}" `
