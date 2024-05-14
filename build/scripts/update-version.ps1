@@ -18,7 +18,6 @@ Defaults to the first containers-toolkit.psd1 file found in the repository.
 .PARAMETER ReleaseType
 The type of release to perform. 
 Defaults to 'patch'.
-
 #>
 
 [CmdletBinding()]

@@ -34,7 +34,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # TODO: Fix cache not working
+      # FIXME: Fix cache not working
       - name: Setup PowerShell module cache
         id: cacher
         uses: actions/cache@v3
@@ -54,12 +54,17 @@ jobs:
           }
 
       - name: Run code analysis with PSScriptAnalyzer
+        id: code_analysis
         shell: pwsh
         run: |
           ${{ env.BUILD_SCRIPTS_DIR }}\script-analyzer.ps1 | Out-File -FilePath lintsummary.md -Encoding utf8 -Force
           cat lintsummary.md >> $env:GITHUB_STEP_SUMMARY
 
+          $fileExists = Test-Path ./psscriptanalysis.xml
+          echo "LINTSUMMARY_EXISTS=$fileExists" >> $env:GITHUB_OUTPUT
+
       - name: Publish PSScriptAnalyzer results file
+        if: steps.code_analysis.outputs.LINTSUMMARY_EXISTS == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: PSScriptAnalyzer.Results
@@ -74,7 +79,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # TODO: Fix cache not working
+      # FIXME: Fix cache not working
       - name: Setup PowerShell module cache
         id: cacher
         uses: actions/cache@v3
