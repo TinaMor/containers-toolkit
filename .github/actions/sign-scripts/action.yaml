@@ -2,6 +2,10 @@ name: Sign PowerShell Scripts
 description: Sign PowerShell scripts in the Containers-Toolkit repository
 
 inputs:
+  Directory:
+    description: The directory containing files to sign
+    default: "./"
+    required: false
   AzureKeyVaultUrl:
     description: "The URL to an Azure Key Vault."
     required: true
@@ -41,7 +45,15 @@ runs:
     # https://learn.microsoft.com/en-us/previous-versions/windows/hardware/design/dn653556(v=vs.85)
     - name: Sign PowerShell scripts
       shell: pwsh
-      run: .github/actions/sign-scripts/sign-scripts.ps1
+      run: |
+        $akvParams = @{
+            'AzureKeyVaultClientId'     = ${{ inputs.AzureKeyVaultClientId }}
+            'AzureKeyVaultTenantId'     = ${{ inputs.AzureKeyVaultTenantId }}
+            'AzureKeyVaultClientSecret' = ${{ inputs.AzureKeyVaultClientSecret }}
+            'AzureKeyVaultUrl'          = ${{ inputs.AzureKeyVaultUrl }}
+            'AzureKeyVaultCertificate'  = ${{ inputs.AzureKeyVaultCertificate }}
+        }
+        .github/actions/sign-scripts/sign-scripts.ps1 -Directory "${{ inputs.Directory }}" @akvParams
 
     # # Commit the changes
     # - name: Commit changes
@@ -58,8 +70,7 @@ runs:
     #     # push the commit back up to source GitHub repository
     #     git push
 
-
-      # https://tech.nicolonsky.ch/github-actions-powershell-signing/
+    # https://tech.nicolonsky.ch/github-actions-powershell-signing/
     # - name: Import code signing certificate
     #   shell: powershell
     #   run: |
