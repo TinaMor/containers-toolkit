@@ -35,6 +35,11 @@ runs:
     # https://learn.microsoft.com/en-us/previous-versions/windows/hardware/design/dn653556(v=vs.85)
     - name: Sign PowerShell scripts
       shell: pwsh
+      env: 
+        AZUREKEYVAULTURL: ${{ secrets.AZUREKEYVAULTURL }}
+        AZUREKEYVAULTCLIENTID: ${{ secrets.AZUREKEYVAULTCLIENTID }}
+        AZUREKEYVAULTCLIENTSECRET: ${{ secrets.AZUREKEYVAULTCLIENTSECRET }}
+        AZUREKEYVAULTNAME: ${{ secrets.AZUREKEYVAULTNAME }}
       run: |
           # Get scripts to sign
           $scripts = Get-ChildItem -Path . -Recurse -ErrorAction Stop | Where-Object { $_.name -match "ps[d|m]?1(xml)?" }
@@ -43,10 +48,10 @@ runs:
           foreach ($script in $scripts) {
               Write-Host "Signing file: $_.Name"
               $filePath = $_.FullName
-              & AzureSignTool sign -kvu "${{ secrets.AZUREKEYVAULTURL }}" `
-                  -kvi "${{ secrets.AZUREKEYVAULTCLIENTID }}" `
-                  -kvs "${{ secrets.AZUREKEYVAULTCLIENTSECRET }}" `
-                  -kvc ${{ secrets.AZUREKEYVAULTNAME }} `
+              & AzureSignTool sign -kvu "$env:AZUREKEYVAULTURL" `
+                  -kvi "$env:AZUREKEYVAULTCLIENTID" `
+                  -kvs "$env:AZUREKEYVAULTCLIENTSECRET" `
+                  -kvc "$env:AZUREKEYVAULTNAME" `
               -tr http://timestamp.digicert.com -v $filePath
           }
 
