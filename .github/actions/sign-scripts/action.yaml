@@ -2,17 +2,20 @@ name: Sign PowerShell Scripts
 description: Sign PowerShell scripts in the Containers-Toolkit repository
 
 inputs:
-  AzureKeyVaultName:
-    description: "The friendly name of your vault."
-    required: true
   AzureKeyVaultUrl:
-    description: "The URL of your vault."
+    description: "The URL to an Azure Key Vault."
     required: true
   AzureKeyVaultClientId:
-    description: "The application id of your Azure application."
+    description: "The Client ID (Application ID) to authenticate to the Azure Key Vault."
     required: true
   AzureKeyVaultClientSecret:
-    description: "The client secret of your Azure application."
+    description: "The client secret of your Azure application to authenticate to the Azure Key Vault."
+    required: true
+  AzureKeyVaultTenantId:
+    description: "The Tenant Id to authenticate to the Azure Key Vault."
+    required: true
+  AzureKeyVaultCertificate:
+    description: "The name of the certificate in Azure Key Vault"
     required: true
 
 runs:
@@ -49,11 +52,13 @@ runs:
           foreach ($script in $scripts) {
               Write-Host "Signing file: $_.Name"
               $filePath = $_.FullName
-              & AzureSignTool sign -kvu "${{ inputs.AzureKeyVaultUrl }}" `
+              & AzureSignTool sign -v $filePath `
+                  -kvu "${{ inputs.AzureKeyVaultUrl }}" `
                   -kvi "${{ inputs.AzureKeyVaultClientId }}" `
                   -kvs "${{ inputs.AzureKeyVaultClientSecret }}" `
-                  -kvc "${{ inputs.AzureKeyVaultName }}" `
-              -tr http://timestamp.digicert.com -v $filePath
+                  -kvt "${{ inputs.AzureKeyVaultTenantId }}" `
+                  -kvc "${{ inputs.AzureKeyVaultCertificate }}" `
+              -tr http://timestamp.digicert.com 
           }
 
     # # Commit the changes

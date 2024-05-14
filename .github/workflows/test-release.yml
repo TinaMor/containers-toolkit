@@ -57,10 +57,11 @@ jobs:
       - name: Sign and archive signed module scripts
         uses: ./.github/actions/sign-scripts
         with:
-          AzureKeyVaultName: ${{ secrets. AzureKeyVaultName }}
-          AzureKeyVaultUrl: ${{ secrets. AzureKeyVaultUrl }}
-          AzureKeyVaultClientId: ${{ secrets. AzureKeyVaultClientId }}
-          AzureKeyVaultClientSecret: ${{ secrets. AzureKeyVaultClientSecret }}
+          AzureKeyVaultUrl: ${{ secrets.AzureKeyVaultUrl }}
+          AzureKeyVaultClientId: ${{ secrets.AzureKeyVaultClientId }}
+          AzureKeyVaultClientSecret: ${{ secrets.AzureKeyVaultClientSecret }}
+          AzureKeyVaultTenantId: ${{ secrets.AzureKeyVaultTenantId }}
+          AzureKeyVaultCertificate: ${{ secrets.AzureKeyVaultCertificate }}
 
       - name: Generate release note from template
         shell: pwsh
