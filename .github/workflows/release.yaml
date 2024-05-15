@@ -29,6 +29,7 @@ env:
 jobs:
   release:
     runs-on: windows-latest
+    if: startsWith(github.ref, 'refs/heads/releases/')
     timeout-minutes: 60
     steps:
       - name: Checkout code

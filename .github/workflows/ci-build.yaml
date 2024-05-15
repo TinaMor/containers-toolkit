@@ -130,34 +130,6 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-      # FIXME: Error: Container action is only supported on Linux
-      # - name: Publish code coverage results
-      #   uses: irongut/CodeCoverageSummary@v1.3.0
-      #   with:
-      #     filename: ${{ env.PESTER_RESULTS_DIR }}\coverage.xml
-      #     fail_below_min: true
-      #     format: markdown
-      #     output: both
-
-      # - name: Publish module scripts to GitHub Artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ${{ env.MODULE_ARTIFACT }}
-      #     path: ${{ env.MODULE_DIR }}
-      #     if-no-files-found: error
-      #     overwrite: true
-
-      # - name: Publish entire dir to GitHub Artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ${{ env.REPO_ARTIFACT }}
-      #     path: .
-      #     if-no-files-found: error
-      #     overwrite: true
-
-    # # The always() function configures the job to continue processing even if there are test failures
-    # if: ${{ always() }}
-
   test-coverage:
     needs: pester
     runs-on: ubuntu-latest
@@ -166,15 +138,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: CTK.Coverage.Summary
-
-      # FIXME: Replace with the https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary
-      # https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
-      # https://github.com/PowerShell/PowerShell/blob/11a7448d7a03fb4d86618ab5783608127df2056d/test/tools/OpenCover/OpenCover.psm1#L288
-      # https://devblogs.microsoft.com/powershell/code-coverage-now-available-for-powershell-core/
-      # https://github.com/PowerShell/PowerShell/blob/master/docs/testing-guidelines/getting-code-coverage.md
-      # https://github.com/danielpalme/ReportGenerator
-      # https://github.com/marketplace/actions/reportgenerator
-      # https://reportgenerator.io/usage
 
       - name: Setup .NET Core # Required to execute ReportGenerator
         uses: actions/setup-dotnet@v3
