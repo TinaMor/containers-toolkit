@@ -1,22 +1,24 @@
 # CONTAINERS TOOLKIT POWERSHELL MODULE
 
-<!-- TODO: Change username -->
-[![CI Build](https://github.com/tinamor/containers-toolkit/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/tinamor/containers-toolkit/actions/workflows/ci-build.yaml)
-[![DevSkim](https://github.com/tinamor/containers-toolkit/actions/workflows/sdl-compliance.yaml/badge.svg)](https://github.com/tinamor/containers-toolkit/actions/workflows/sdl-compliance.yaml)
+[![CI Build][ci-build-image]][ci-build-site]
+[![DevSkim][devskim-image]][devskim-site]
 [![cf-image][]][cf-site]
-[![CI Build](https://github.com/tinamor/containers-toolkit/actions/workflows/ci-build.yaml/badge_linecoverage.svg)](https://github.com/tinamor/containers-toolkit/actions/workflows/ci-build.yaml)
 
-[cf-site]: https://www.codefactor.io/repository/github/powershell/powershell
+[ci-build-image]: https://github.com/microsoft/containers-toolkit/actions/workflows/ci-build.yaml/badge.svg
+[ci-build-site]: https://github.com/microsoft/containers-toolkit/actions/workflows/ci-build.yaml
+[devskim-image]: https://github.com/microsoft/containers-toolkit/actions/workflows/sdl-compliance.yaml/badge.svg
+[devskim-site]: https://github.com/microsoft/containers-toolkit/actions/workflows/sdl-compliance.yaml
 [cf-image]: https://www.codefactor.io/repository/github/powershell/powershell/badge
+[cf-site]: https://www.codefactor.io/repository/github/powershell/powershell
 
-
-# Table of contents
+## Table of contents
 
 1. [Introduction](#introduction)
 2. [Usage](#usage)
-    - [Importing the module](#importing-the-module)
+    - [Installing and importing Containers-Toolkit module](#installing-and-importing-containers-toolkit-module)
+        - [](#download-source-files)
     - [Command reference](#command-reference)
-3. [TODO](#todo)
+3. [Important Notes](#important-notes)
 4. [Contribution](#contribution)
 5. [Related Projects](#related-projects)
 
@@ -26,52 +28,58 @@ Containers-Toolkit is a Windows PowerShell module for downloading, installing, a
 
 ## Usage
 
-### Importing the module
+### Installing and importing Containers-Toolkit module
+
+#### Install the module from PowerShell Gallery
 
 > COMING SOON: We are currently working on publishing this module to PS Gallery to make it easier to import the module
 
-#### Option 1
+#### Download Source files
 
-Manually import this module using:
+> Coming soon
 
-```PowerShell
-Import-Module -Name <absolute-path>\containers-toolkit.psd1 -Force
-```
+#### Clone the repo
 
-Containers-Toolkit
+**Option 1:**  Clone containers-toolkit into one of the folder locations in the `$env:PSModulePath` environment variable.
 
-#### Option 2
+1. To get a possible module path:
 
-Clone containers-toolkit into one of the folder locations in the `$env:PSModulePath` environment variable.
+    ```PowerShell
+    $env:PSModulePath -split ";"
+    ```
 
-To get a possible module path:
+2. Clone the repo
 
-```PowerShell
-$env:PSModulePath
-```
+    ```PowerShell
+    cd <selected-module-path>
+    git clone https://github.com/microsoft/containers-toolkit.git
+    ```
 
-```PowerShell
-cd <module path>
-git clone https://github.com/microsoft/containers-toolkit.git
-```
+3. Import the module
 
-```PowerShell
-Import-Module -Name containers-toolkit -Force
-```
+    ```PowerShell
+    Import-Module -Name containers-toolkit -Force
+    ```
 
-#### Option 3
+**Option 2:** Clone containers-toolkit to a folder location of choice and add the new module location to the Windows PowerShell module path
 
-Clone containers-toolkit to a folder location of choice and add the new module location to the Windows PowerShell module path
+1. Clone the repo
 
-```PowerShell
-cd <module path>
-git clone https://github.com/microsoft/containers-toolkit.git
+    ```PowerShell
+    git clone https://github.com/microsoft/containers-toolkit.git
+    ```
 
+2. Add the directory to @indows PowerShell module path
 
-$env:PSModulePath = "$env:PSModulePath;<path-to-module-directory>"
+    ```PowerShell
+    $env:PSModulePath = "$env:PSModulePath;<path-to-module-directory>"
+    ```
 
-Import-Module -Name containers-toolkit -Force
-```
+3. Import the module
+
+    ```PowerShell
+    Import-Module -Name containers-toolkit -Force
+    ```
 
 ### Get the module details
 
@@ -114,25 +122,25 @@ Get-Command -Module containers-toolkit
     Install-Containerd -Version "1.7.7" -InstallPath 'C:\Test\Path\Containerd'
     ```
 
-### Important Notes
+## Important Notes
 
 1. Requires elevated PowerShell to run some commands.
 
 1. To use these tools (Containerd, BuildKit, and nerdctl), ensure that Containers and HyperV Windows features are enabled.
 
-To get the features to enable, use:
+    To get the features to enable, use:
 
-```PowerShell
-Get-WindowsOptionalFeature -Online | `
-    Where-Object { $_.FeatureName -like 'containers' -or $_.FeatureName -match "Microsoft-Hyper-V(-All)?$" } | `
-    Select-Object FeatureName, Possible, State, RestartNeeded
-```
+    ```PowerShell
+    Get-WindowsOptionalFeature -Online | `
+        Where-Object { $_.FeatureName -like 'containers' -or $_.FeatureName -match "Microsoft-Hyper-V(-All)?$" } | `
+        Select-Object FeatureName, Possible, State, RestartNeeded
+    ```
 
-To enable a feature:
+    To enable a feature:
 
-```PowerShell
-Enable-WindowsOptionalFeature -Online -FeatureName '<Feature-Name-Here>' -All -NoRestart
-```
+    ```PowerShell
+    Enable-WindowsOptionalFeature -Online -FeatureName '<Feature-Name-Here>' -All -NoRestart
+    ```
 
 1. Requires PowerShell modules [HNS](https://www.powershellgallery.com/packages/HNS) and [ThreadJob](https://www.powershellgallery.com/packages/ThreadJob)
 
@@ -144,9 +152,11 @@ Enable-WindowsOptionalFeature -Online -FeatureName '<Feature-Name-Here>' -All -N
     - [Unblock-File](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/unblock-file?view=powershell-7.4)
 
 ## TODO
-- [ ] Set up GitWorkflow files: 
-    - [GitHub Repository Structure Best Practices](https://medium.com/code-factory-berlin/github-repository-structure-best-practices-248e6effc405)
-    - Setup ARM64 [self-hosted runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners)
+
+- [ ] Set up GitWorkflow files:
+  - [GitHub Repository Structure Best Practices](https://medium.com/code-factory-berlin/github-repository-structure-best-practices-248e6effc405)
+  - Setup ARM64 [self-hosted runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners)
+  - Dependabot to update version in main + Licence
 - [ ] Pipeline configuration:
   - Code Analysis with [DevSkim](https://aka.ms/DevSkim)
 - [ ] Publish module to PSGallery

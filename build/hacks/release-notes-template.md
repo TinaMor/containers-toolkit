@@ -16,19 +16,37 @@ Ongoing issue that are still being worked on
 
 ## Quick start guide
 
-### Initial set-up
+### Install from PowerShell Gallery
 
 ```PowerShell
 Install-Module -Name Containers-Toolkit -RequiredVersion "__NEW_VERSTION__"
 ```
-
-### Update Module
 
 If the module is already installed, update the module:
 
 ```PowerShell
 Update-Module -Name Containers-Toolkit -RequiredVersion "__NEW_VERSTION__"
 ```
+
+### Download Source Files
+
+1. Open a new terminal
+2. cd into the location of the downloaded files
+    Example: If downloaded to the downloads folder:
+
+    ```PowerShell
+    cd "$env:USERPROFILE\Downloads\containers-toolkit"
+    ```
+
+3. Unblock the files
+
+    ```PowerShell
+    Get-ChildItem -Path . -Recurse | Unblock-File"
+    ```
+
+4. Import the module
+
+See instructions in the [Installing and importting Containers-Toolkit module](../../README.md#download-source-files) section
 
 ## Visuals
 
