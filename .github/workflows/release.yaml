@@ -1,3 +1,11 @@
+###########################################################################
+#                                                                         #
+#   Copyright (c) Microsoft Corporation. All rights reserved.             #
+#                                                                         #
+#   This code is licensed under the MIT License (MIT).                    #
+#                                                                         #
+###########################################################################
+
 name: Release
 
 # configure manual trigger
@@ -84,7 +92,7 @@ jobs:
         run: |
           # Compress ./container-toolkit module directory
           $outputDir = ".\Source code.zip"
-          Compress-Archive -Path .\containers-toolkit\ -DestinationPath "$outputDir" -Update
+          Compress-Archive -Path @(".\containers-toolkit\","LICENSE") -DestinationPath "$outputDir" -Update
 
           # Get new version tag
           $tag="${{ steps.update-version.outputs.NEW_VERSION }}"

@@ -37,3 +37,7 @@ Update-Module -Name Containers-Toolkit -RequiredVersion "__NEW_VERSTION__"
 ## Discussions
 
 For any questions or feedback on this release, see the discussion: [Containers.ToolKit v__NEW_VERSTION__](<LINK-TO-VERSION-DISCUSSION>)
+
+## Release Authors
+
+[ADD YOUR NAME HERE] (@[ADD YOUR GITHUB ID HERE])
