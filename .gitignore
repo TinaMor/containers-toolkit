@@ -5,9 +5,3 @@
 # Tests
 /TestResults
 *.sarif
-
-# Pipeline files
-*.pfx
-*.
-psscriptanalysis.xml
-release-note.txt 

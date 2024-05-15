@@ -52,7 +52,7 @@ jobs:
         shell: pwsh
         run: |
           $NewSemVer = .\build\scripts\update-version.ps1 -ReleaseType ${{ inputs.release-type }}
-          echo "NEW_VERSION='$NewSemVer'" >> $env:GITHUB_OUTPUT
+          echo "NEW_VERSION=$NewSemVer" >> $env:GITHUB_OUTPUT
 
       - name: Sign and archive signed module scripts
         uses: ./.github/actions/sign-scripts
@@ -83,14 +83,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Compress ./container-toolkit module directory
-          Compress-Archive -Path .\containers-toolkit\ -DestinationPath .\container-toolkit.zip -Update
+          $outputDir = ".\Source code.zip"
+          Compress-Archive -Path .\containers-toolkit\ -DestinationPath "$outputDir" -Update
 
           # Get new version tag
           $tag="${{ steps.update-version.outputs.NEW_VERSION }}"
           $vtag = "v${tag}"
 
           # Create release
-          gh release create -F ./release-note.txt --draft --title "${vtag}" "${vtag}" .\container-toolkit.zip
+          gh release create -F ./release-note.txt --draft --title "${vtag}" "${vtag}" "$outputDir"
 
       - name: Publish containers-toolkit to PS Gallery
         shell: pwsh
