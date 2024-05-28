@@ -64,7 +64,7 @@ function Get-InstallationFile {
     begin {
         $functions = {
             function Receive-File ($feature) {
-                Write-Information -InformationAction Continue -MessageData "Downloading $($feature.Feature) version $($feature.Version)"
+                Write-Information -InformationAction Continue -MessageData "Downloading $($feature.Feature) version v$($feature.Version)"
                 try {
                     Invoke-WebRequest -Uri $feature.Uri -OutFile $feature.DownloadPath -UseBasicParsing
                 }
@@ -107,7 +107,7 @@ function Get-InstallationFile {
     }
 
     end {
-        $jobs | Remove-Job -Force
+        $jobs | Remove-Job -Force -ErrorAction SilentlyContinue
     }
 }
 
@@ -170,7 +170,6 @@ function Install-ContainerToolConsent ($tool) {
 
     return [ActionConsent]$consent -eq [ActionConsent]::Yes
 }
-
 
 function Uninstall-ContainerToolConsent ($tool, $path) {
     $question = "Do you want to uninstall $tool from $($path)?"
@@ -266,13 +265,26 @@ function Invoke-StopService($service) {
     }
 }
 
+function Test-ConfFileEmpty($Path) {
+    if (!(Test-Path -LiteralPath $Path)) {
+        return $true
+    }
+
+    $isFileNotEmpty = (([System.IO.File]::ReadAllText($Path)) -match '\S')
+    return (-not $isFileNotEmpty )
+}
+
 function Invoke-ExecutableCommand {
     param (
         [parameter(Mandatory)]
         [String] $executable,
         [parameter(Mandatory)]
-        [String] $arguments
+        [String] $arguments,
+        [Parameter(Mandatory = $false, HelpMessage = "Period of time to wait (in seconds) for the associated process to exit. Default is 15 seconds.")]
+        [Int32] $timeout = 15
     )
+
+    Write-Debug "Executing '$executable $arguments'"
 
     $pinfo = New-Object System.Diagnostics.ProcessStartInfo
     $pinfo.FileName = $executable
@@ -283,7 +295,15 @@ function Invoke-ExecutableCommand {
     $p = New-Object System.Diagnostics.Process
     $p.StartInfo = $pinfo
     $p.Start() | Out-Null
-    $p.WaitForExit()
+    # Blocks the current thread of execution until the time has elapsed or the process has exited.
+    $p.WaitForExit($timeout * 1000) | Out-Null
+
+    if (-not $p.HasExited) {
+        Write-Debug "Execution did not complete in $timeout seconds."
+    }
+    else {
+        Write-Debug "Command execution completed. Exit code: $($p.ExitCode)"
+    }
 
     return $p
 }
@@ -301,3 +321,4 @@ Export-ModuleMember -Function Test-ServiceRegistered
 Export-ModuleMember -Function Add-FeatureToPath
 Export-ModuleMember -Function Remove-FeatureFromPath
 Export-ModuleMember -Function Invoke-ServiceAction
+Export-ModuleMember -Function Test-ConfFileEmpty

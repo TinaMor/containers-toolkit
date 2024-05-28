@@ -72,7 +72,7 @@ function Install-ContainerTools {
     )
 
     begin {
-        $toInstall = @("containerd", "buildkit", "nerdctl")
+        $toInstall = @("containerd ($containerdVersion)", "buildkit ($buildKitVersion)", "nerdctl ($nerdctlVersion)")
         $toInstallString = $($toInstall -join ', ')
 
         $WhatIfMessage = "$toInstallString will be installed"
@@ -84,22 +84,27 @@ function Install-ContainerTools {
             <# Action when this condition is true #>
             $WhatIfMessage += " and downloaded files will be removed"
         }
+
+        # Strip leading "v" from version
+        $containerdVersion = $containerdVersion.TrimStart("v")
+        $buildKitVersion = $buildKitVersion.TrimStart("v")
+        $nerdctlVersion = $nerdctlVersion.TrimStart("v")
     }
 
     process {
         if ($PSCmdlet.ShouldProcess($InstallPath, $WhatIfMessage)) {
-            Write-Debug "Tools to install: $toInstallString"
+            Write-Output "Tools to install: $toInstallString"
 
             # Global Variables needed for the script
             $containerdTarFile = "containerd-${containerdVersion}-windows-amd64.tar.gz"
-            $BuildKitTarFile = "buildkit-v${BuildKitVersion}.windows-amd64.tar.gz"
+            $buildKitTarFile = "buildkit-v${buildKitVersion}.windows-amd64.tar.gz"
             $nerdctlTarFile = "nerdctl-${nerdctlVersion}-windows-amd64.tar.gz"
 
             # Installation paths
             $ContainerdPath = "$InstallPath\Containerd"
             $BuildkitPath = "$InstallPath\Buildkit"
             $NerdCTLPath = "$InstallPath\nerdctl"
-
+            
             $files = @(
                 [PSCustomObject]@{
                     Feature      = "Containerd"
@@ -140,7 +145,7 @@ function Install-ContainerTools {
                     # Uninstall if tool exists at specified location. Requires user consent
                     if (-not (Test-EmptyDirectory -Path $params.InstallPath) ) {
                         Write-Warning "Uninstalling $($params.Feature) from $($params.InstallPath)"
-                        Uninstall-ContainerTool -Tool $params.Feature -Path $params.InstallPath -Force $force
+                        Uninstall-ContainerTool -Tool $params.Feature -Path $params.InstallPath -Force:$force
                     }
 
                     # Untar downloaded files to the specified installation path
@@ -156,8 +161,8 @@ function Install-ContainerTools {
 
                     if ($RegisterServices) {
                         $RegisterParams = @{
-                            force = $force
-                            feature = $params.Feature
+                            force       = $force
+                            feature     = $params.Feature
                             installPath = $params.InstallPath
                         }
                         Register-Service @RegisterParams
@@ -194,7 +199,7 @@ function Install-ContainerTools {
 
 function Uninstall-ContainerTool($Tool, $Path, $force) {
     $uninstallCommand = "Uninstall-$($Tool)"
-    & $uninstallCommand -Path "$Path" -Force:$Force
+    & $uninstallCommand -Path "$Path" -Force:$Force -Confirm:$false
 }
 
 function Get-InstalledVersion($feature, $Latest) {
