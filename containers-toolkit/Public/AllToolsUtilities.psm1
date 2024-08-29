@@ -176,7 +176,7 @@ function Get-InstalledVersion($feature, $Latest) {
     $daemon = $null
     switch ($feature) {
         "buildkit" {
-            $bktdExecutable = (Get-Command "build*.exe" | Where-Object { $_.Source -like "*buildkit*" }) | Select-Object Name
+            $bktdExecutable = (Get-Command "buildkit*.exe" | Where-Object { $_.Source -like "*buildkit*" }) | Select-Object Name
             if ($bktdExecutable) {
                 $executable = ($bktdExecutable[0]).Name
             }

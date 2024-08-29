@@ -24,13 +24,13 @@ or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any addi
 
 ## Contributor License Agreement
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+This project welcomes contributions and suggestions. Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
 the rights to use your contribution. For details, visit <https://cla.opensource.microsoft.com>.
 
 When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+a CLA and decorate the pull request (PR) appropriately (e.g., status check, comment). Simply follow the instructions
+provided by the bot. You will only need to do this once across all repositories using our CLA.
 
 ## Reporting Issues
 
@@ -84,7 +84,7 @@ here are the quick steps:
 
 ### Spellchecking documentation
 
-Documentation is spellchecked. We use the[textlint](https://github.com/textlint/textlint/wiki/Collection-of-textlint-rule) command-line tool,which can be run in interactive mode to correct typos.
+Documentation is spellchecked. We use the[textlint](https://github.com/textlint/textlint/wiki/Collection-of-textlint-rule) command-line tool, which can be run in interactive mode to correct typos.
 
 To run the spellchecker, follow these steps:
 
@@ -155,7 +155,7 @@ Please do not:
 
 ### Setup development environment
 
-1. **Clone the repo**
+1. **Clone the repository**
 
     **Option 1:**  Clone containers-toolkit into one of the folder locations in the `$env:PSModulePath` environment variable.
 
@@ -165,7 +165,7 @@ Please do not:
         $env:PSModulePath -split ";"
         ```
 
-    1. Clone the repo
+    1. Clone the repository
 
         ```PowerShell
         cd <selected-module-path>
@@ -174,7 +174,7 @@ Please do not:
 
     **Option 2:** Clone containers-toolkit to a folder location of choice and add the new module location to the Windows PowerShell module path
 
-    1. Clone the repo
+    1. Clone the repository
 
         ```PowerShell
         cd <path-of-your-choice>
@@ -259,7 +259,7 @@ Our script-based test framework is [Pester](https://github.com/Pester/Pester). W
 
 #### Running Containers-Toolkit tests outside of CI
 
-During the automated CI the unit tests and integration tests are run as part of the PR validation. You can run these tests locally by using [`Invoke-Pester` cmdlet](https://pester.dev/docs/commands/invoke-pester/) or the [`run-tests.ps1` file](./build/scripts/run-tests.ps1). The [`run-tests.ps1` file](./build/scripts/run-tests.ps1) uses a [PesterConfiguration-object](https://pester.dev/docs/commands/New-PesterConfiguration) for runnings tests using Invoke-Pester.  
+During the automated CI the unit tests and integration tests are run as part of the PR validation. You can run these tests locally by using [`Invoke-Pester` cmdlet](https://pester.dev/docs/commands/invoke-pester/) or the [`run-tests.ps1` file](./build/scripts/run-tests.ps1). The [`run-tests.ps1` file](./build/scripts/run-tests.ps1) uses a [PesterConfiguration-object](https://pester.dev/docs/commands/New-PesterConfiguration) for running tests using `Invoke-Pester`.  
 
 > [!TIP]  
 > If using `run-tests.ps1`, remember to set `$ErrorActionPreference = "Continue"` to ensure that `Write-Error` messages are not treated as terminating errors.

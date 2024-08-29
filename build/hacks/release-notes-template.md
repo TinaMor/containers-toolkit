@@ -1,63 +1,42 @@
 ## Introduction
 
-_Provide a brief summary of the update._
+[_Provide a brief summary of the update._]
 
 ## New Features
 
-_List the new features and give a short description of what the feature does._
+[_List the new features and give a short description of what the feature does._]
 
 ## Bug fixes
 
-_Bulleted list of bug fixes and issue resolutions: Discuss the resolved issues and their impact._
+[_Bulleted list of bug fixes and issue resolutions: Discuss the resolved issues and their impact._]
+
+## Feature/Functionality Deprecation
+
+[_Briefly describe the feature or functionality that is being deprecated_]
+
+- **Impact**: [_Explain the impact of this deprecation, such as features that will no longer be available, recommended alternatives, and timelines_].
+- **Recommendation**: Users are advised to [_provide guidance on what users should do in response to the deprecation, such as migrating to a new feature, or removing dependencies on the deprecated feature_].
+- **Timeline**: [_Specify any timelines for removal, such as versions or dates_].
+
+Note: Deprecations are part of our ongoing efforts to improve the performance, security, and usability of our platform. We encourage users to review the deprecation details carefully and plan any necessary updates to their implementations.
 
 ## Known issues
 
-_Ongoing issue that are still being worked on._
+[_Ongoing issue that are still being worked on._]
 
 ## Quick start guide
 
-### Install from PowerShell Gallery
-
-```PowerShell
-Install-Module -Name Containers-Toolkit -RequiredVersion "__NEW_VERSTION__"
-```
-
-If the module is already installed, update the module:
-
-```PowerShell
-Update-Module -Name Containers-Toolkit -RequiredVersion "__NEW_VERSTION__"
-```
-
-### Download Source Files
-
-1. Download source files
-1. Open a new terminal
-1. cd into the location of the downloaded files
-    Example: If downloaded to the downloads folder:
-
-    ```PowerShell
-    cd "$env:USERPROFILE\Downloads\containers-toolkit"
-    ```
-
-1. Unblock the files
-
-    ```PowerShell
-    Get-ChildItem -Path . -Recurse | Unblock-File"
-    ```
-
-1. Import the module
-
-See instructions in the [Installing and importting Containers-Toolkit module](../../README.md#download-source-files) section
+See instructions in the [Installing and importing Containers-Toolkit module](../../README.md#installation-and-setup) section
 
 ## Visuals
 
-_Screenshots, Side-by-side comparisons, 30-second videos_
+[_Screenshots, Side-by-side comparisons, 30-second videos_]
 
 ## Discussions
 
-_**Update the discussoin link**_
+_**Update the discussion link**_
 
-For any questions or feedback on this release, see the discussion: [Containers.ToolKit v__NEW_VERSTION__](<LINK-TO-VERSION-DISCUSSION>)
+For any questions or feedback on this release, see the discussion: [Containers.ToolKit v__NEW_VERSION__](<LINK-TO-VERSION-DISCUSSION>)
 
 ## Release Authors
 
