@@ -6,7 +6,7 @@
 #                                                                         #
 ###########################################################################
 
-name: Release
+name: Release Containers-Toolkit to PowerShell Gallery
 
 on:
   workflow_dispatch:
@@ -82,7 +82,7 @@ jobs:
         run: |
           $NewSemVer="${{ steps.update-version.outputs.NEW_VERSION }}"
           $releaseNotes = [IO.File]::ReadAllText(".\build\hacks\release-notes-template.md")
-          $releaseNotes = $releaseNotes -replace "__NEW_VERSTION__", $NewSemVer
+          $releaseNotes = $releaseNotes -replace "__NEW_VERSION__", $NewSemVer
           $releaseNotes | Out-File -FilePath ./release-note.txt -Encoding utf8 -Force
 
       - name: Create release
