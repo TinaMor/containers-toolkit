@@ -108,6 +108,20 @@ function Install-Nerdctl {
 
     process {
         if ($PSCmdlet.ShouldProcess($env:COMPUTERNAME, $WhatIfMessage)) {
+            $latestVersion = Get-NerdctlLatestVersion
+
+            # Get nerdctl version to install
+            if (!$Version) {
+                # Get default version
+                $Version = $latestVersion
+            }
+            $Version = $Version.TrimStart('v')
+
+            # Check if a newer version is available
+            if ($Version -ne 'latest') {
+                Test-IsLatestVersion -Tool 'nerdctl' -Version $Version -LatestVersion $latestVersion | Out-Null
+            }
+
             # Check if tool already exists at specified location
             if ($isInstalled) {
                 $errMsg = "nerdctl already exists at $InstallPath or the directory is not empty"
@@ -121,12 +135,6 @@ function Install-Nerdctl {
                     Throw "nerdctl installation failed. $_"
                 }
             }
-
-            # Get nerdctl version to install
-            if (!$Version) {
-                $Version = Get-NerdctlLatestVersion
-            }
-            $Version = $Version.TrimStart('v')
 
             Write-Output "Downloading and installing nerdctl v$version at $InstallPath"
 

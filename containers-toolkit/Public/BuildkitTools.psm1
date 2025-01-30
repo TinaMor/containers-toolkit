@@ -71,6 +71,20 @@ function Install-Buildkit {
 
     process {
         if ($PSCmdlet.ShouldProcess($env:COMPUTERNAME, $WhatIfMessage)) {
+            $latestVersion = Get-BuildkitLatestVersion
+
+            # Get Buildkit version to install
+            if (!$Version) {
+                # Get default version
+                $Version = $latestVersion
+            }
+            $Version = $Version.TrimStart('v')
+
+            # Check if a newer version is available
+            if ($Version -ne 'latest') {
+                Test-IsLatestVersion -Tool 'Buildkit' -Version $Version -LatestVersion $latestVersion | Out-Null
+            }
+
             # Check if tool already exists at specified location
             if ($isInstalled) {
                 $errMsg = "Buildkit already exists at $InstallPath or the directory is not empty"
@@ -84,12 +98,6 @@ function Install-Buildkit {
                     Throw "Buildkit installation failed. $_"
                 }
             }
-
-            # Get Buildkit version to install
-            if (!$Version) {
-                $Version = Get-BuildkitLatestVersion
-            }
-            $Version = $Version.TrimStart('v')
 
             Write-Output "Downloading and installing Buildkit v$Version at $InstallPath"
 

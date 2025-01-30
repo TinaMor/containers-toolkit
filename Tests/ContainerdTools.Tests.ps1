@@ -73,6 +73,7 @@ Describe "ContainerdTools.psm1" {
         It "Should use defaults" {
             Install-Containerd -Force -Confirm:$false
 
+            Should -Invoke Get-ContainerdLatestVersion -ModuleName 'ContainerdTools' -Times 1 -Exactly -Scope It
             Should -Invoke Uninstall-Containerd -ModuleName 'ContainerdTools' -Times 0 -Exactly -Scope It
             Should -Invoke Get-InstallationFile -ModuleName 'ContainerdTools' -ParameterFilter {
                 ($fileParameters[0].Feature -eq "Containerd") -and

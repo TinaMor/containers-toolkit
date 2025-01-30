@@ -77,6 +77,7 @@ Describe "BuildkitTools.psm1" {
         It "Should use defaults" {
             Install-Buildkit -Force -Confirm:$false
 
+            Should -Invoke Get-BuildkitLatestVersion -ModuleName 'BuildkitTools' -Times 1 -Exactly -Scope It
             Should -Invoke Uninstall-Buildkit -ModuleName 'BuildkitTools' -Times 0 -Exactly -Scope It
             Should -Invoke Get-InstallationFile -ModuleName 'BuildkitTools'  -ParameterFilter {
                 $fileParameters[0].Feature -eq "Buildkit" -and

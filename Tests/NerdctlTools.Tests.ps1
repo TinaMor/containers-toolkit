@@ -67,6 +67,7 @@ Describe "NerdctlTools.psm1" {
         It "Should use defaults" {
             Install-Nerdctl -Force -Confirm:$false
 
+            Should -Invoke Get-NerdctlLatestVersion -ModuleName 'NerdctlTools' -Times 1 -Exactly -Scope It
             Should -Invoke Uninstall-Nerdctl -ModuleName 'NerdctlTools' -Times 0 -Exactly -Scope It
             Should -Invoke Get-InstallationFile -ModuleName 'NerdctlTools' -ParameterFilter {
                 $fileParameters[0].Feature -eq "nerdctl" -and
