@@ -72,7 +72,6 @@ function Update-CTKModuleManifest {
             $params = @{
                 Path          = $manifestPath
                 ModuleVersion = $Version
-                LicenseUri    = "https://github.com/microsoft/containers-toolkit/blob/v$moduleVersion/LICENSE"
                 ReleaseNotes  = $ReleaseNotes
                 Prerelease    = $Prerelease
                 Tags          = $ModuleTags

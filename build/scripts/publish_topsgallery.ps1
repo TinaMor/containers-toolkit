@@ -30,10 +30,7 @@ param (
     [String]$ApiKey,
 
     [Parameter(Mandatory = $false)]
-    [String]$ReleaseNotesPath,
-
-    [Parameter(Mandatory = $true)]
-    [string]$Version
+    [String]$ReleaseNotesPath
 )
 
 $ErrorActionPreference = "Stop"
@@ -41,14 +38,16 @@ $ErrorActionPreference = "Stop"
 $ModulePath = Resolve-Path $ModulePath
 Write-Output "Publishing module to the PowerShell Gallery. Source: '$ModulePath'..."
 
-$LicenseUri = "https://raw.githubusercontent.com/microsoft/containers-toolkit/refs/heads/release/$VERSION/LICENSE"
-Write-Host "License URI: $LicenseUri"
+# Get license information from the module manifest
+$ModuleManifestPath = Join-Path -Path $ModulePath -ChildPath "containers-toolkit.psd1"
+$ModuleManifest = Get-Content -Path $ModuleManifestPath -Raw | ConvertFrom-StringData
+$LicenseUri = $ModuleManifest.LicenseUri
 
 $ReleaseNotes = if ($ReleaseNotesPath) { Get-Content -Path $ReleaseNotesPath -Raw } else { '' }
 $params = @{
     Path         = "$ModulePath"
     NuGetApiKey  = "$ApiKey"
-    LicenseUri   = $LicenseUri
+    LicenseUri   = "$LicenseUri"
     ReleaseNotes = $ReleaseNotes
 }
 
