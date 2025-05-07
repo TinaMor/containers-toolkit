@@ -33,13 +33,16 @@ param (
     [String]$ReleaseNotesPath,
 
     [Parameter(Mandatory = $true)]
-    [uri]$LicenseUri
+    [string]$Version
 )
 
 $ErrorActionPreference = "Stop"
 
 $ModulePath = Resolve-Path $ModulePath
 Write-Output "Publishing module to the PowerShell Gallery. Source: '$ModulePath'..."
+
+$LicenseUri = "https://raw.githubusercontent.com/microsoft/containers-toolkit/refs/heads/release/$VERSION/LICENSE"
+Write-Host "License URI: $LicenseUri"
 
 
 $ReleaseNotes = if ($ReleaseNotesPath) { Get-Content -Path $ReleaseNotesPath -Raw } else { '' }
