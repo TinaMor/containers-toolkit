@@ -42,6 +42,7 @@ Write-Output "Publishing module to the PowerShell Gallery. Source: '$ModulePath'
 $ModuleManifestPath = Join-Path -Path $ModulePath -ChildPath "containers-toolkit.psd1"
 $ModuleManifest = Get-Content -Path $ModuleManifestPath -Raw | ConvertFrom-StringData
 $LicenseUri = $ModuleManifest.LicenseUri
+Write-Output "License URI: $LicenseUri"
 
 $ReleaseNotes = if ($ReleaseNotesPath) { Get-Content -Path $ReleaseNotesPath -Raw } else { '' }
 $params = @{
