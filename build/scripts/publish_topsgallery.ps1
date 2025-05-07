@@ -24,7 +24,7 @@ Path to the release notes. Defaults to empty string.
 [CmdletBinding()]
 param (
     [Parameter(Mandatory = $false)]
-    [String]$ModulePath="./containers-toolkit",
+    [String]$ModulePath = "./containers-toolkit",
 
     [Parameter(Mandatory = $true)]
     [String]$ApiKey,
@@ -44,12 +44,11 @@ Write-Output "Publishing module to the PowerShell Gallery. Source: '$ModulePath'
 $LicenseUri = "https://raw.githubusercontent.com/microsoft/containers-toolkit/refs/heads/release/$VERSION/LICENSE"
 Write-Host "License URI: $LicenseUri"
 
-
 $ReleaseNotes = if ($ReleaseNotesPath) { Get-Content -Path $ReleaseNotesPath -Raw } else { '' }
 $params = @{
-    Path        = "$ModulePath"
-    NuGetApiKey = "$ApiKey"
-    LicenseUri = $LicenseUri
+    Path         = "$ModulePath"
+    NuGetApiKey  = "$ApiKey"
+    LicenseUri   = $LicenseUri
     ReleaseNotes = $ReleaseNotes
 }
 
