@@ -142,7 +142,7 @@ Note that the HostNetworkingService module is available only when the Hyper-V Wi
             LicenseUri                 = 'https://raw.githubusercontent.com/microsoft/containers-toolkit/refs/heads/main/LICENSE'
 
             # A URL to the main website for this project.
-            ProjectUri                 = 'https://github.com/microsoft/containers-toolkit'
+            ProjectUri                 = 'https://github.com/microsoft/containers-toolkit.git'
 
             # A URL to an icon representing this module.
             # IconUri = ''
@@ -151,11 +151,10 @@ Note that the HostNetworkingService module is available only when the Hyper-V Wi
             # ReleaseNotes = ''
 
             # Prerelease string of this module
-            # Prerelease = ''
+            Prerelease = 'beta'
 
-            # FIXME: $true causes module publishing issues
             # Flag to indicate whether the module requires explicit user acceptance for install/update/save
-            RequireLicenseAcceptance   = $false
+            RequireLicenseAcceptance   = $true
 
             # External dependent modules of this module
             # ExternalModuleDependencies = @()
@@ -165,7 +164,7 @@ Note that the HostNetworkingService module is available only when the Hyper-V Wi
     } # End of PrivateData hashtable
 
     # HelpInfo URI of this module
-    # HelpInfoURI = ''
+    HelpInfoURI = 'https://github.com/microsoft/containers-toolkit/blob/main/README.md'
 
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''

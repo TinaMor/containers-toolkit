@@ -66,17 +66,16 @@ function Update-CTKModuleManifest {
 
             # Get release notes
             $ReleaseNotes = if ($ReleaseNotesPath) { Get-Content -Path $ReleaseNotesPath -Raw } else { '' }
-            $ReleaseNotes = if ($ReleaseNotesPath) { Get-Content -Path $ReleaseNotesPath -Raw } else { '' }
 
-            $ModuleTags = @("Windows Containers", "Containers-Toolkit", "containerd", "buildkit", "nerdctl", "cni")
+            # Update the module manifest
             $params = @{
-                Path          = $manifestPath
-                ModuleVersion = $Version
-                ReleaseNotes  = $ReleaseNotes
-                Prerelease    = $Prerelease
-                Tags          = $ModuleTags
+                Path                     = $manifestPath
+                ModuleVersion            = $Version
+                ReleaseNotes             = $ReleaseNotes
+                Prerelease               = $Prerelease
+                RequireLicenseAcceptance = $true
             }
-            Update-ModuleManifest @params
+            Update-PSModuleManifest -RequireLicenseAcceptance @params
 
             # Test the manifest script is valid
             Test-ModuleManifest -Path $manifestPath | Out-Null
