@@ -25,13 +25,13 @@ _Ongoing issue that are still being worked on._
 ### Install from PowerShell Gallery
 
 ```PowerShell
-Install-Module -Name Containers-Toolkit -RequiredVersion "__REQUIRED_VERSION__"
+Install-Module -Name Containers-Toolkit -RequiredVersion "__NEW_VERSION__" "__ALLOW_PRERELEASE__"
 ```
 
 If the module is already installed, update the module:
 
 ```PowerShell
-Update-Module -Name Containers-Toolkit -RequiredVersion "__REQUIRED_VERSION__"
+Update-Module -Name Containers-Toolkit -RequiredVersion "__NEW_VERSION__" "__ALLOW_PRERELEASE__"
 ```
 
 ### Download Source Files
@@ -39,7 +39,7 @@ Update-Module -Name Containers-Toolkit -RequiredVersion "__REQUIRED_VERSION__"
 See instructions in the [Installing and importing Containers-Toolkit module](../../README.md#download-source-files) section.
 
 ```PowerShell
-Invoke-WebRequest -Uri "https://github.com/microsoft/containers-toolkit/releases/download/v__NEW_VERSION__/containers-toolkit-__NEW_VERSION__.tar.gz" -OutFile "containers-toolkit.tar.gz"
+Invoke-WebRequest -Uri "https://github.com/microsoft/containers-toolkit/releases/download/__REQUIRED_VERSION__/containers-toolkit-__REQUIRED_VERSION__.tar.gz" -OutFile "containers-toolkit.tar.gz"
 tar -xvf containers-toolkit.tar.gz -C $ENV:USERPROFILE\Documents\WindowsPowerShell\Modules
 ```
 
