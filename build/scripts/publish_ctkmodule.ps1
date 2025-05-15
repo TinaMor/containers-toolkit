@@ -248,8 +248,6 @@ function Publish-CTKModule {
         ApiKey       = "$ApiKey"
         Repository   = "$RepositoryName"
         Path         = "$Path"
-        LicenseUri   = "$LicenseUri"
-        ReleaseNotes = "$ReleaseNotes"
     }
 
     switch ($RepositoryName) {

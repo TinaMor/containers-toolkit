@@ -42,6 +42,8 @@ param (
     [String]$ReleaseNotesPath
 )
 
+$ErrorActionPreference = 'Stop'
+
 Set-Variable -Name ManifestPath -Value $ManifestPath -Scope Script -Force
 Set-Variable -Name Version -Value $Version -Scope Script -Force
 Set-Variable -Name ReleaseNotesPath -Value $ReleaseNotesPath -Scope Script -Force
@@ -71,11 +73,11 @@ function Update-CTKModuleManifest {
             $params = @{
                 Path                     = $manifestPath
                 ModuleVersion            = $Version
-                ReleaseNotes             = $ReleaseNotes
                 Prerelease               = $Prerelease
+                ReleaseNotes             = $ReleaseNotes
                 RequireLicenseAcceptance = $true
             }
-            Update-PSModuleManifest @params
+            Update-ModuleManifest @params
 
             # Test the manifest script is valid
             Test-ModuleManifest -Path $manifestPath | Out-Null
