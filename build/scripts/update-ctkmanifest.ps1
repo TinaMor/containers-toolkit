@@ -75,7 +75,7 @@ function Update-CTKModuleManifest {
                 Prerelease               = $Prerelease
                 RequireLicenseAcceptance = $true
             }
-            Update-PSModuleManifest -RequireLicenseAcceptance @params
+            Update-PSModuleManifest @params
 
             # Test the manifest script is valid
             Test-ModuleManifest -Path $manifestPath | Out-Null
