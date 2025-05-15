@@ -64,27 +64,30 @@ Write-Debug "Root directory: $ROOT_DIR"
 $ModulePath = Resolve-Path $ModulePath
 $ModuleManifestPath = Join-Path -Path $ModulePath -ChildPath "containers-toolkit.psd1"
 
-Write-Host "Publishing module to the PowerShell Gallery. Source: '$ModuleManifestPath'..."
-
 # Read the module manifest
+Write-Debug "Reading module manifest file: $ModuleManifestPath"
 $ModuleManifest = Invoke-Expression -Command (Get-Content -Path $ModuleManifestPath -Raw)
 $manifestPsData = $ModuleManifest.PrivateData.PSData
 
 # Get module info
+Write-Debug "Getting module info..."
 $ModuleInfo = Get-Module -ListAvailable "$ModuleManifestPath"
 
 # Get the module name in Camel Case
+Write-Debug "Extracting module name..."
 $ModuleName = $ModuleInfo.Name.ToLower()
 $separator = '-'
 $ModuleName = ($ModuleName -split "$separator" | ForEach-Object { $_.Substring(0, 1).ToUpper() + $_.Substring(1) }) -join "$separator"
 
 # Get the module version
+Write-Debug "Extracting module version..."
 $ReleaseVersion = $ModuleInfo.Version.ToString()
 if ($manifestPsData.Prerelease) {
     $ReleaseVersion = "$ReleaseVersion-$($manifestPsData.Prerelease)"
 }
 
 # Get the release notes
+Write-Debug "Getting release notes..."
 $ReleaseNotes = if ($ReleaseNotesPath) { Get-Content -Path $ReleaseNotesPath -Raw } else { '' }
 
 # Set variables for the script
@@ -244,12 +247,10 @@ function Publish-CTKModule {
 
     Write-Host "Publishing module...`n`t{ Repository: '$RepositoryName',  Source: '$Path' }"
 
+    # Set parameters for Publish-PSResource
     $params = @{
-        ApiKey       = "$ApiKey"
-        Repository   = "$RepositoryName"
-        Path         = "$Path"
+        Repository = "$RepositoryName"
     }
-
     switch ($RepositoryName) {
         "PsGallery" {
             $params.Path = $Path
@@ -258,6 +259,10 @@ function Publish-CTKModule {
             $params.NupkgPath = $Path
         }
     }
+    Write-Debug "Publish-PSResource parameters: $([pscustomobject]$params)"
+
+    # Set the API key
+    $params.ApiKey = $ApiKey
 
     # Publish the module
     Publish-PSResource @params
