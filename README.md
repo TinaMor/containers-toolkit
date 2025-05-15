@@ -46,21 +46,29 @@ You can find documentation for these functions here: [Containers-Toolkit Documen
 ### Install Containers-Toolkit module from PowerShell Gallery
 
 ```PowerShell
-Install-Module -Name containers-toolkit -RequiredVersion "__NEW_VERSION__"
+Install-Module -Name containers-toolkit
 ```
+
+> [!TIP]  
+> To find the latest version of the module, use:
+>
+> ```PowerShell
+> Find-Module -Name containers-toolkit -AllowPrerelease
+> ```
 
 ### Download signed source files
 
 1. Download source files
 
     ```PowerShell
-    Invoke-WebRequest -Uri "https://github.com/microsoft/containers-toolkit/releases/download/__NEW_VERSION__/containers-toolkit-__NEW_VERSION__.tar.gz" -OutFile "containers-toolkit.tar.gz"
+    $Version = "<VERSION>"
+    Invoke-WebRequest -Uri "https://github.com/microsoft/containers-toolkit/releases/download/v$Version/containers-toolkit-v$Version.tar.gz" -OutFile "containers-toolkit.tar.gz"
     ```
 
 1. Verify the signature
 
     ```PowerShell
-    $HASH_VALUE = "__HASH_VALUE__"
+    $HASH_VALUE = "<HASH_VALUE>"
     (Get-FileHash -Algorithm SHA256 containers-toolkit.tar.gz).Hash -eq $HASH_VALUE
     ```
 
