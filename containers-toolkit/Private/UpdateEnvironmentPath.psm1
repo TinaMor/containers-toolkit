@@ -1,4 +1,4 @@
-﻿###########################################################################
+###########################################################################
 #                                                                         #
 #   Copyright (c) Microsoft Corporation. All rights reserved.             #
 #                                                                         #
@@ -57,7 +57,7 @@ function Update-EnvironmentPath {
             }
 
             if ($pathChanged) {
-                Write-CTKInfo "$ActionVerb $toAction in $PathType Environment Path"
+                [Logger]::Info("$ActionVerb $toAction in $PathType Environment Path")
 
                 # Get the updated path
                 $updatedPath = switch ($Action) {
@@ -68,7 +68,7 @@ function Update-EnvironmentPath {
 
                 # For tests, we do not want to update the environment path
                 if ($env:pester) {
-                    Write-CTKDebug "Skipping environment path update for tests"
+                    [Logger]::Debug("Skipping environment path update for tests")
                     return $updatedPath
                 }
 
