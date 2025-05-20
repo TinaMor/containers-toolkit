@@ -74,7 +74,7 @@ function Install-Buildkit {
             # Check if tool already exists at specified location
             if ($isInstalled) {
                 $errMsg = "Buildkit already exists at $InstallPath or the directory is not empty"
-                Write-Warning $errMsg
+                Write-CTKWarning $errMsg
 
                 # Uninstall if tool exists at specified location. Requires user consent
                 try {
@@ -135,13 +135,13 @@ function Install-Buildkit {
                 }
             }
             catch {
-                Write-Warning "Failed to registed and start Buildkitd service. $_"
+                Write-CTKWarning "Failed to registed and start Buildkitd service. $_"
             }
 
             if ($showCommands) {
                 $commands = (Get-command -Name '*buildkit*' | Where-Object { $_.Source -like 'Containers-Toolkit' -and $_.Name -ne 'Install-Buildkit' }).Name
                 $message = "Other useful Buildkit commands: $($commands -join ', ').`nTo learn more about each command, run Get-Help <command-name>, e.g., 'Get-Help `"*buildkit*`"' or 'Get-Help Register-BuildkitdService'`n"
-                Write-Information -MessageData $message -Tags "Instructions" -InformationAction Continue
+                Write-CTKInfo $message
             }
 
             # Show buildkit binaries help
@@ -150,7 +150,7 @@ function Install-Buildkit {
                 # Remove extension from executable
                 $commandName = $executable -replace ".exe", ""
                 $message = "For $commandName usage: run `"$executable -h`""
-                Write-Information -MessageData "$message`n" -Tags "Instructions" -InformationAction Continue
+                Write-CTKInfo "$message`n"
             }
         }
         else {
@@ -239,13 +239,13 @@ function Register-BuildkitdService {
 
             # If buildkitd is not installed, terminate execution
             if (!(Test-BuildkitdServiceExists -BuildkitPath $BuildkitPath)) {
-                Write-Error "Buildkitd executable not installed."
+                Write-CTKError "Buildkitd executable not installed."
                 return
             }
 
             # Check buildkitd service is already registered
             if (Test-ServiceRegistered -Service 'Buildkitd') {
-                Write-Warning ( -join @("buildkitd service already registered. To re-register the service, "
+                Write-CTKWarning ( -join @("buildkitd service already registered. To re-register the service, "
                         "stop the service by running 'Stop-Service buildkitd' or 'Stop-BuildkitdService', then "
                         "run 'buildkitd --unregister-service'. Wait for buildkitd service to be deregistered, "
                         "then re-reun this command."))
@@ -255,7 +255,7 @@ function Register-BuildkitdService {
             if (!$force) {
                 if (!$ENV:PESTER) {
                     if (-not ($PSCmdlet.ShouldContinue('', "Are you sure you want to register buildkitd service?"))) {
-                        Write-Error "buildkitd service registration cancelled."
+                        Write-CTKError "buildkitd service registration cancelled."
                         return
                     }
                 }
@@ -284,11 +284,11 @@ function Register-BuildkitdService {
                 }
 
                 if ($consent) {
-                    Write-Warning "Containerd conf file not found at $cniConfPath. Buildkit service will be registered without Containerd cni configurations."
+                    Write-CTKWarning "Containerd conf file not found at $cniConfPath. Buildkit service will be registered without Containerd cni configurations."
                     $command = "buildkitd.exe --register-service --debug --containerd-worker=true --service-name buildkitd"
                 }
                 else {
-                    Write-Error "Failed to register buildkit service. Containerd conf file not found at $cniConfPath.`n`t1. Ensure that the required CNI plugins are installed or you can install them using 'Install-WinCNIPlugin'.`n`t2. Create the file to resolve this issue .`n`t3. Rerun this command  'Register-BuildkitdService'"
+                    Write-CTKError "Failed to register buildkit service. Containerd conf file not found at $cniConfPath.`n`t1. Ensure that the required CNI plugins are installed or you can install them using 'Install-WinCNIPlugin'.`n`t2. Create the file to resolve this issue .`n`t3. Rerun this command  'Register-BuildkitdService'"
                     Throw "Failed to register buildkit service. Containerd conf file not found at $cniConfPath."
                 }
             }
@@ -309,7 +309,7 @@ function Register-BuildkitdService {
 
             $output = Invoke-ExecutableCommand -Executable 'sc.exe' -arguments 'config buildkitd depend=containerd'
             if ($output.ExitCode -ne 0) {
-                Write-Error "Failed to set dependency for buildkitd on containerd. $($output.StandardOutput.ReadToEnd())"
+                Write-CTKError "Failed to set dependency for buildkitd on containerd. $($output.StandardOutput.ReadToEnd())"
             }
 
             if ($Start) {
@@ -317,10 +317,10 @@ function Register-BuildkitdService {
                 Write-Output "Successfully started Buildkitd service."
             }
             else {
-                Write-Information -InformationAction Continue -MessageData "To start buildkitd service, run 'Start-Service buildkitd' or 'Start-BuildkitdService'"
+                Write-CTKInfo "To start buildkitd service, run 'Start-Service buildkitd' or 'Start-BuildkitdService'"
             }
 
-            Write-Debug $(Get-Service 'buildkitd' -ErrorAction SilentlyContinue | Format-Table -AutoSize | Out-String)
+            Write-CTKDebug $(Get-Service 'buildkitd' -ErrorAction SilentlyContinue | Format-Table -AutoSize | Out-String)
 
             # YAGNI: Do we need a buildkitd.toml on Windows?
         }
@@ -370,7 +370,7 @@ function Uninstall-Buildkit {
                 Throw "$tool uninstallation cancelled."
             }
 
-            Write-Warning "Uninstalling preinstalled $tool at the path $path"
+            Write-CTKWarning "Uninstalling preinstalled $tool at the path $path"
             try {
                 Uninstall-BuildkitHelper -Path $path
             }
@@ -393,7 +393,7 @@ function Uninstall-BuildkitHelper {
     )
 
     if (Test-EmptyDirectory -Path $Path) {
-        Write-Error "Buildkit does not exist at $Path or the directory is empty."
+        Write-CTKError "Buildkit does not exist at $Path or the directory is empty."
         return
     }
 
@@ -448,14 +448,14 @@ function Test-BuildkitdServiceExists($buildkitPath) {
 
 function Unregister-Buildkitd($buildkitPath) {
     if (!(Test-ServiceRegistered -Service 'buildkitd')) {
-        Write-Warning "Buildkitd service does not exist as an installed service."
+        Write-CTKWarning "Buildkitd service does not exist as an installed service."
         return
     }
 
     # Unregister buildkit service
     $buildkitdExecutable = "$buildkitPath\bin\buildkitd.exe"
 
-    Write-Debug "Buildkitd path: $buildkitdExecutable "
+    Write-CTKDebug "Buildkitd path: $buildkitdExecutable "
     $output = Invoke-ExecutableCommand -Executable $buildkitdExecutable -Arguments "--unregister-service"
     if ($output.ExitCode -ne 0) {
         Throw "Could not unregister buildkitd service. $($output.StandardError.ReadToEnd())"

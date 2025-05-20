@@ -63,7 +63,7 @@ function Install-Containerd {
             # Check if tool already exists at specified location
             if ($isInstalled) {
                 $errMsg = "Containerd already exists at $InstallPath or the directory is not empty"
-                Write-Warning $errMsg
+                Write-CTKWarning $errMsg
 
                 # Uninstall if tool exists at specified location. Requires user consent
                 try {
@@ -126,13 +126,13 @@ function Install-Containerd {
                 }
             }
             catch {
-                Write-Warning "Failed to setup Containerd service. $_"
+                Write-CTKWarning "Failed to setup Containerd service. $_"
             }
 
             if ($showCommands) {
                 $commands = (Get-command -Name '*containerd*' | Where-Object { $_.Source -like 'Containers-Toolkit' -and $_.Name -ne 'Install-Containerd' }).Name
                 $message = "Other useful Containerd commands: $($commands -join ', ').`nTo learn more about each command, run Get-Help <command-name>, e.g., 'Get-Help Register-ContainerdService'"
-                Write-Information -MessageData $message -Tags "Instructions" -InformationAction Continue
+                Write-CTKInfo $message
             }
 
             Write-Output "For containerd usage: run 'containerd -h'`n"
@@ -222,7 +222,7 @@ function Register-ContainerdService {
 
             # Check containerd service is already registered
             if (Test-ServiceRegistered -Service 'containerd') {
-                Write-Warning ( -join @("Containerd service already registered. To re-register the service, "
+                Write-CTKWarning ( -join @("Containerd service already registered. To re-register the service, "
                         "stop the service by running 'Stop-Service containerd' or 'Stop-ContainerdService', then "
                         "run 'containerd --unregister-service'. Wait for containerd service to be deregistered, "
                         "then re-reun this command."))
@@ -235,7 +235,7 @@ function Register-ContainerdService {
             }
 
             if (!$consent) {
-                Write-Error "containerd service registration cancelled."
+                Write-CTKError "containerd service registration cancelled."
                 return
             }
 
@@ -245,7 +245,7 @@ function Register-ContainerdService {
 
             # Get default containerd config and write to file
             $containerdConfigFile = "$ContainerdPath\config.toml"
-            Write-Debug "Containerd config file: $containerdConfigFile"
+            Write-CTKDebug "Containerd config file: $containerdConfigFile"
 
             $output = Invoke-ExecutableCommand -Executable $containerdExecutable -Arguments "config default"
             $output.StandardOutput.ReadToEnd() | Out-File -FilePath $containerdConfigFile -Encoding ascii -Force
@@ -277,10 +277,10 @@ function Register-ContainerdService {
                 Write-Output "Successfully started Containerd service."
             }
             else {
-                Write-Information -InformationAction Continue -MessageData "To start containerd service, run 'Start-Service containerd' or 'Start-ContainerdService'"
+                Write-CTKInfo "To start containerd service, run 'Start-Service containerd' or 'Start-ContainerdService'"
             }
 
-            Write-Debug $(Get-Service 'containerd' -ErrorAction SilentlyContinue | Format-Table -AutoSize | Out-String)
+            Write-CTKDebug $(Get-Service 'containerd' -ErrorAction SilentlyContinue | Format-Table -AutoSize | Out-String)
         }
         else {
             # Code that should be processed if doing a WhatIf operation
@@ -328,7 +328,7 @@ function Uninstall-Containerd {
                 Throw "$tool uninstallation cancelled."
             }
 
-            Write-Warning "Uninstalling preinstalled $tool at the path $path"
+            Write-CTKWarning "Uninstalling preinstalled $tool at the path $path"
             try {
                 Uninstall-ContainerdHelper -Path $path
             }
@@ -352,7 +352,7 @@ function Uninstall-ContainerdHelper {
     )
 
     if (Test-EmptyDirectory -Path $Path) {
-        Write-Error "Containerd does not exist at $Path or the directory is empty."
+        Write-CTKError "Containerd does not exist at $Path or the directory is empty."
         return
     }
 
@@ -383,7 +383,7 @@ function Uninstall-ContainerdHelper {
 
 function Unregister-Containerd ($containerdPath) {
     if (!(Test-ServiceRegistered -Service 'Containerd')) {
-        Write-Warning "Containerd service does not exist as an installed service."
+        Write-CTKWarning "Containerd service does not exist as an installed service."
         return
     }
 

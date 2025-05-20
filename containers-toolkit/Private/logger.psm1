@@ -22,8 +22,6 @@ function New-LogMessage {
         [ValidateSet("DEBUG", "ERROR", "INFO", "WARNING")]
         [string]$LogLevel = "INFO"
     )
-    Write-Host "LogLevel: $LogLevel"
-    Write-Host "Message: $Message"
     $parsedMessage = Get-LogMessage -Message $Message -LogLevel $LogLevel
     switch ($LogLevel) {
         "DEBUG" {

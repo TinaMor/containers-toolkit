@@ -30,7 +30,7 @@ function Show-ContainerTools {
 
     $registerCommands = (Get-Command -Name "*-*Service" -Module 'Containers-Toolkit').Name -join ', '
     $message = "For unregistered services/daemons, check the tool's help or register the service using `n`t$registerCommands"
-    Write-Information -MessageData $message -Tags "Instructions" -InformationAction Continue
+    Write-CTKInfo $message
     return $installedTools
 }
 
@@ -91,8 +91,8 @@ function Install-ContainerTools {
         if ($PSCmdlet.ShouldProcess($env:COMPUTERNAME, $WhatIfMessage)) {
             Write-Output "The following tools will be installed: $toInstallString"
 
-            Write-Debug "Downloading files to $DownloadPath"
-            Write-Debug "Installing files to $InstallPath"
+            Write-CTKDebug "Downloading files to $DownloadPath"
+            Write-CTKDebug "Installing files to $InstallPath"
 
             $completedInstalls = @()
             $failedInstalls = @()
@@ -135,7 +135,7 @@ function Install-ContainerTools {
                     $completedInstalls += $task.Name
                 }
                 catch {
-                    Write-Error "$($task.Name) installation failed. $_"
+                    Write-CTKError "$($task.Name) installation failed. $_"
                     $failedInstalls += $task.Name
                 }
             }
@@ -145,7 +145,7 @@ function Install-ContainerTools {
             }
 
             if ($failedInstalls) {
-                Write-Warning "Installation failed for $($failedInstalls -join ', ')`n"
+                Write-CTKWarning "Installation failed for $($failedInstalls -join ', ')`n"
             }
 
             if ($RegisterServices) {
@@ -153,7 +153,7 @@ function Install-ContainerTools {
                     Initialize-NatNetwork -Force:$force -Confirm:$false
                 }
                 catch {
-                    Write-Error "Failed to initialize NAT network. $_"
+                    Write-CTKError "Failed to initialize NAT network. $_"
                 }
             }
             else {
@@ -163,7 +163,7 @@ To register containerd and buildkitd services and create a NAT network, see help
     Get-Help Register-BuildkitdService
     Get-Help Initialize-NatNetwork
 "@
-                Write-Information -MessageData $message -Tags "Instructions" -InformationAction Continue
+                Write-CTKInfo $message
             }
 
             Write-Output "Installation complete. See logs for more details"

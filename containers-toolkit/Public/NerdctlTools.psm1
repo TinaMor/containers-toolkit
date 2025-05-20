@@ -48,7 +48,7 @@ function Install-NerdctlDependencies {
             & $InstallCommand -OSArchitecture $OsArch -Force:$Force -Confirm:$false
         }
         catch {
-            Write-Error "Installation failed for $dependency. $_"
+            Write-CTKError "Installation failed for $dependency. $_"
         }
     }
 }
@@ -109,7 +109,7 @@ function Install-Nerdctl {
             # Check if nerdctl already exists at specified location
             if ($isInstalled) {
                 $errMsg = "nerdctl already exists at $InstallPath or the directory is not empty"
-                Write-Warning $errMsg
+                Write-CTKWarning $errMsg
 
                 # Uninstall if tool exists at specified location. Requires user consent
                 try {
@@ -228,7 +228,7 @@ function Uninstall-Nerdctl {
                 Throw "$tool uninstallation cancelled."
             }
 
-            Write-Warning "Uninstalling preinstalled $tool at the path $path"
+            Write-CTKWarning "Uninstalling preinstalled $tool at the path $path"
             try {
                 Uninstall-NerdctlHelper -Path $path
             }
@@ -252,7 +252,7 @@ function Uninstall-NerdctlHelper {
     )
 
     if (Test-EmptyDirectory -Path $Path) {
-        Write-Error "nerdctl does not exist at $Path or the directory is empty."
+        Write-CTKError "nerdctl does not exist at $Path or the directory is empty."
         return
     }
 
