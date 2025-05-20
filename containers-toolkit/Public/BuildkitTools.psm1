@@ -288,8 +288,7 @@ function Register-BuildkitdService {
                     $command = "buildkitd.exe --register-service --debug --containerd-worker=true --service-name buildkitd"
                 }
                 else {
-                    [Logger]::Error("Failed to register buildkit service. Containerd conf file not found at $cniConfPath.`n`t1. Ensure that the required CNI plugins are installed or you can install them using 'Install-WinCNIPlugin'.`n`t2. Create the file to resolve this issue .`n`t3. Rerun this command  'Register-BuildkitdService'")
-                    Throw "Failed to register buildkit service. Containerd conf file not found at $cniConfPath."
+                    [Logger]::Fatal("Failed to register buildkit service. Containerd conf file not found at $cniConfPath.`n`t1. Ensure that the required CNI plugins are installed or you can install them using 'Install-WinCNIPlugin'.`n`t2. Create the file to resolve this issue .`n`t3. Rerun this command  'Register-BuildkitdService'")
                 }
             }
 

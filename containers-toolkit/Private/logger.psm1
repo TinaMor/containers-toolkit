@@ -45,8 +45,8 @@ class Logger {
 
     # Set quiet mode from environment variable: SKIP_CTK_LOGGING
     # User-defined environment variable to skip logging. Equivalent to --quiet.
-    # If not set, all messages are logged to the terminal and to the event log.
     # If set, only DEBUG messages are logged to the terminal.
+    # If not set, all messages are logged to the terminal and to the event log.
     static [bool] GetQuiet() {
         try {
             $quietValue = $env:SKIP_CTK_LOGGING
@@ -62,12 +62,42 @@ class Logger {
         return [Logger]::LogLevelRank[$Level.ToUpper()] -ge [Logger]::LogLevelRank[[Logger]::MinLevel]
     }
 
+    # Format the message for logging
+    static [string] FormatMessage([object] $message) {
+        if ($null -eq $message) {
+            return "[null]"
+        }
+
+        if ($message -is [string]) {
+            return $message
+        }
+
+        try {
+            return $message | ConvertTo-Json -Depth 5 -Compress
+        }
+        catch {
+            return $message.ToString()
+            # $Message = $Message | Out-String
+        }
+    }
+
+    # Retrieve the function in the call stack that triggered the log
+    static [pscustomobject] GetCallerFunction($CallStack) {
+        $i = 3
+        $CallerFunction = $CallStack[$i]
+
+        while ((-not $CallerFunction.Command) -and ($i -lt $CallStack.Count - 1)) {
+            $i++
+            $CallerFunction = $CallStack[$i]
+        }
+
+        return $CallerFunction
+    }
+
     # Generate a parsed log message from the log level and message
     static [string] GetLogMessage([string] $Level, [string] $Message) {
         $CallStack = Get-PSCallStack
-
-        $CallStack | Tee-Object -FilePath "ctk.log" -Append | Out-Null
-        $Caller = $CallStack | Where-Object { $_.Command } | Select-Object -Skip 2 -First 1
+        $Caller = [Logger]::GetCallerFunction($CallStack)
 
         $timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffffffK")
         $cmd = $Caller.InvocationInfo.MyCommand
@@ -118,7 +148,7 @@ class Logger {
 
     # Write log messages to the console and/or event log (or file)
     # This is the main logging function that handles all log levels
-    static [void] Write([string] $Level, [string] $Message) {
+    static [void] Write([string] $Level, [object] $Message) {
         # Set values
         [Logger]::MinLevel = [Logger]::GetMinLevel()
         [Logger]::LogFile = [Logger]::GetLogFile()
@@ -131,8 +161,11 @@ class Logger {
             return
         }
 
+        # Convert the message to a string
+        $formatedMessage = [Logger]::FormatMessage($message)
+
         # Generate the log message
-        $parsedMessage = [Logger]::GetLogMessage($Level, $Message)
+        $parsedMessage = [Logger]::GetLogMessage($Level, $formatedMessage)
 
         # Default: Log to event log (non-DEBUG messages)
         if ($Level -ne "DEBUG") {
@@ -158,9 +191,10 @@ class Logger {
         }
     }
 
-    static [void] Fatal([string] $Message) { [Logger]::Write("FATAL", $Message) }
-    static [void] Error([string] $Message) { [Logger]::Write("ERROR", $Message) }
-    static [void] Warning([string] $Message) { [Logger]::Write("WARNING", $Message) }
-    static [void] Info([string] $Message) { [Logger]::Write("INFO", $Message) }
-    static [void] Debug([string] $Message) { [Logger]::Write("DEBUG", $Message) }
+    static [void] Fatal([object] $Message) { [Logger]::Write("FATAL", $Message) }
+    static [void] Error([object] $Message) { [Logger]::Write("ERROR", $Message) }
+    static [void] Warning([object] $Message) { [Logger]::Write("WARNING", $Message) }
+    static [void] Info([object] $Message) { [Logger]::Write("INFO", $Message) }
+    static [void] Debug([object] $Message) { [Logger]::Write("DEBUG", $Message) }
+    static [void] Log([string] $Level = "INFO", [string] $Message) { [Logger]::Write($Level, $Message) }
 }

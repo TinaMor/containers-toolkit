@@ -283,8 +283,7 @@ function Get-InstallationFile {
                     Receive-File -Params $downloadParams
                 }
                 catch {
-                    [Logger]::Error("Failed to download $($downloadParams.Feature) release assets. $($_.Exception.Message)")
-                    Throw $_  # Re-throw the exception to halt execution if a download fails
+                    [Logger]::Fatal("Failed to download $($downloadParams.Feature) release assets. $($_.Exception.Message)")
                 }
             }
 
@@ -306,8 +305,7 @@ function Get-InstallationFile {
                 }
             }
             catch {
-                [Logger]::Error("Checksum verification process failed: $($_.Exception.Message)")
-                Throw $_  # Re-throw the exception if checksum verification fails
+                [Logger]::Fatal("Checksum verification process failed: $($_.Exception.Message)")
             }
 
             # Remove the checksum file after verification
