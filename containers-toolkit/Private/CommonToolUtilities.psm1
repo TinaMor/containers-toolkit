@@ -10,11 +10,6 @@ using module "..\Private\logger.psm1"
 
 $ModuleParentPath = Split-Path -Parent $PSScriptRoot
 Import-Module -Name "$ModuleParentPath\Private\UpdateEnvironmentPath.psm1" -Force
-# . "$ModuleParentPath\Private\logger.psm1" -Force
-# Import-Module -Name "$ModuleParentPath\Private\logger.psm1" -Force
-
-# # $Log = [Logger]
-# Set-Variable -Option AllScope -scope Global -Visibility Public -Name "Log" -Value [Logger] -Force
 
 class ContainerTool {
     [ValidateNotNullOrEmpty()][string]$Feature

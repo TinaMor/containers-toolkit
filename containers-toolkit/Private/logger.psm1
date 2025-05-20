@@ -136,7 +136,7 @@ class Logger {
 
         # Default: Log to event log (non-DEBUG messages)
         if ($Level -ne "DEBUG") {
-            # [Logger]::WriteToEventLog($Level, $parsedMessage)
+            [Logger]::WriteToEventLog($Level, $parsedMessage)
         }
 
         # Log to file if CTK_LOG_FILE is set
