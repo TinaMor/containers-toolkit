@@ -17,6 +17,10 @@ Describe "ContainerNetworkTools.psm1" {
         Import-Module -Name "$ModuleParentPath\Private\CommonToolUtilities.psm1" -Force
         Import-Module -Name "$ModuleParentPath\Public\ContainerNetworkTools.psm1" -Force
         Import-Module -Name "$RootPath\Tests\TestData\MockClasses.psm1" -Force
+
+        # Moock functions
+        Mock New-EventLog -ModuleName 'Logger'
+        Mock Write-EventLog -ModuleName 'Logger'
     }
 
     AfterEach {

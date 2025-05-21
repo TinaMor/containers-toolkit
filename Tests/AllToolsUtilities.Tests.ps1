@@ -6,6 +6,7 @@
 #                                                                         #
 ###########################################################################
 
+using module ..\containers-toolkit\Private\Logger.psm1
 
 Describe "AllToolsUtilities.psm1" {
     BeforeAll {
@@ -17,6 +18,10 @@ Describe "AllToolsUtilities.psm1" {
         Import-Module -Name "$ModuleParentPath\Public\NerdctlTools.psm1" -Force
         Import-Module -Name "$ModuleParentPath\Public\ContainerNetworkTools.psm1" -Force
         Import-Module -Name "$ModuleParentPath\Public\AllToolsUtilities.psm1" -Force
+
+        # Moock functions
+        Mock New-EventLog -ModuleName 'Logger'
+        Mock Write-EventLog -ModuleName 'Logger'
     }
 
     AfterAll {
@@ -39,6 +44,8 @@ Describe "AllToolsUtilities.psm1" {
             Mock Invoke-ExecutableCommand -ModuleName "AllToolsUtilities" `
                 -ParameterFilter { $Arguments -eq "--version" } `
                 -MockWith { return $mockConfigProcess }
+            Mock New-EventLog -ModuleName 'Logger'
+            Mock Write-EventLog -ModuleName 'Logger'
         }
 
         It "Should get containerd version" {
